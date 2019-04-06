@@ -1,20 +1,26 @@
 package com.leaderment.sales.pojo.dto;
 
+import java.util.List;
+
+/**
+ * 销售计划查询参数DTO
+ */
 public class FindSalesPalnListDTO {
 
-    private int countryId;
+    private List<Integer> countryIdList;
 
     /**
      * 销售计划 提交人
      */
     private int userId;
 
-    private String modelNumber;
+
+    private List<Integer> productIdList;
 
     /**
-     * 销售计划时间
+     * 销售计划Id
      */
-    private String palnDate;
+    private int  salePlanId;
 
     /**
      * 销售计划时间开始时间
@@ -27,8 +33,77 @@ public class FindSalesPalnListDTO {
      */
     private String endPalnDate;
 
+    /**
+     * 销售计划 item的状态
+     */
+    private Integer status;
 
+    public List<Integer> getCountryIdList() {
+        return countryIdList;
+    }
 
+    public void setCountryIdList(List<Integer> countryIdList) {
+        this.countryIdList = countryIdList;
+    }
 
+    public int getUserId() {
+        return userId;
+    }
 
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public List<Integer> getProductIdList() {
+        return productIdList;
+    }
+
+    public void setProductIdList(List<Integer> productIdList) {
+        this.productIdList = productIdList;
+    }
+
+    public int getSalePlanId() {
+        return salePlanId;
+    }
+
+    public void setSalePlanId(int salePlanId) {
+        this.salePlanId = salePlanId;
+    }
+
+    public String getStartPalnDate() {
+        return startPalnDate;
+    }
+
+    public void setStartPalnDate(String startPalnDate) {
+        this.startPalnDate = startPalnDate;
+    }
+
+    public String getEndPalnDate() {
+        return endPalnDate;
+    }
+
+    public void setEndPalnDate(String endPalnDate) {
+        this.endPalnDate = endPalnDate;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "FindSalesPalnListDTO{" +
+                "countryIdList=" + countryIdList +
+                ", userId=" + userId +
+                ", productIdList=" + productIdList +
+                ", salePlanId=" + salePlanId +
+                ", startPalnDate='" + startPalnDate + '\'' +
+                ", endPalnDate='" + endPalnDate + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 }

@@ -1,61 +1,98 @@
 package com.leaderment.sales.pojo.vo;
 
 public class ItemValVO {
-    private int itmeKeyId;
-    private int itmeValId;
-    private String itmeKey;
-    private double itmeKeyRatio;
-    private String itmeVal;
+    private int itemKeyId;
+    private int itemValId;
+    private int type;
+    private int status;
+    private String itemKey;
+    private String itemVal;
+    /**
+     * 历史销量 对应的天数
+     */
+    private int lastDayVal;
+
+    /**
+     * 比率
+     */
+    private double itemKeyRatio;
 
 
-    public int getItmeKeyId() {
-        return itmeKeyId;
+    public double getItemKeyRatio() {
+        return itemKeyRatio;
     }
 
-    public void setItmeKeyId(int itmeKeyId) {
-        this.itmeKeyId = itmeKeyId;
+    public void setItemKeyRatio(double itemKeyRatio) {
+        this.itemKeyRatio = itemKeyRatio;
     }
 
-    public int getItmeValId() {
-        return itmeValId;
+    public int getLastDayVal() {
+        return lastDayVal;
     }
 
-    public void setItmeValId(int itmeValId) {
-        this.itmeValId = itmeValId;
+    public void setLastDayVal(int lastDayVal) {
+        this.lastDayVal = lastDayVal;
     }
 
-    public String getItmeKey() {
-        return itmeKey;
+    public int getItemKeyId() {
+        return itemKeyId;
     }
 
-    public void setItmeKey(String itmeKey) {
-        this.itmeKey = itmeKey;
+    public void setItemKeyId(int itemKeyId) {
+        this.itemKeyId = itemKeyId;
     }
 
-    public double getItmeKeyRatio() {
-        return itmeKeyRatio;
+    public int getItemValId() {
+        return itemValId;
     }
 
-    public void setItmeKeyRatio(double itmeKeyRatio) {
-        this.itmeKeyRatio = itmeKeyRatio;
+    public void setItemValId(int itemValId) {
+        this.itemValId = itemValId;
     }
 
-    public String getItmeVal() {
-        return itmeVal;
+    public int getType() {
+        return type;
     }
 
-    public void setItmeVal(String itmeVal) {
-        this.itmeVal = itmeVal;
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getItemKey() {
+        return itemKey;
+    }
+
+    public void setItemKey(String itemKey) {
+        this.itemKey = itemKey;
+    }
+
+    public String getItemVal() {
+        return itemVal;
+    }
+
+    public void setItemVal(String itemVal) {
+        this.itemVal = itemVal;
     }
 
     @Override
     public String toString() {
         return "ItemValVO{" +
-                "itmeKeyId=" + itmeKeyId +
-                ", itmeValId=" + itmeValId +
-                ", itmeKey='" + itmeKey + '\'' +
-                ", itmeKeyRatio=" + itmeKeyRatio +
-                ", itmeVal='" + itmeVal + '\'' +
+                "itemKeyId=" + itemKeyId +
+                ", itemValId=" + itemValId +
+                ", type=" + type +
+                ", status=" + status +
+                ", itemKey='" + itemKey + '\'' +
+                ", itemVal='" + itemVal + '\'' +
+                ", lastDayVal=" + lastDayVal +
+                ", itemKeyRatio=" + itemKeyRatio +
                 '}';
     }
 }

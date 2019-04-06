@@ -12,20 +12,13 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 @EnableEurekaClient
 public class SalePlanApplication {
 
-
 	public static void main(String[] args) {
-
-
 		try{
 			SpringApplication.run(SalePlanApplication.class, args);
 		}catch(Exception error){
 			System.err.println("启动报错"+ error);
-
 		}
-
-
 	}
-
 
 	//为了打包springboot项目
 	protected SpringApplicationBuilder configure(

@@ -17,7 +17,7 @@
             bison.sale_plan
     </select>
 
-    <select id="findItemTableHead" resultType="com.leaderment.sales.pojo.vo.ItemKey">
+    <select id="findItemTableHead" resultType="com.leaderment.sales.pojo.ItemKey">
         select
             ik.itme_key_id as itmeKeyId,
             itme_key  as itmeKey
@@ -45,26 +45,166 @@
 
     </select>
 
-    <select id="findSalePlanItemLit" resultType="com.leaderment.sales.pojo.vo.ItemValVO">
-        SELECT
-        ik.itme_key_id as itmeKeyId,
-        ik.itme_key as itmeKey,
-        ik.itme_key_ratio as itmeKeyRatio,
-        iv.itme_val_id as itmeValId,
-        iv.itme_val as itmeVal
-        FROM
-        bison.sale_plan  sp,
-        bison.sale_plan_item  spi,
-        bison.itme_key ik,
-        bison.itme_val iv
 
+    <select id="isExistSalePalnItem"  resultType="java.lang.Integer">
+        SELECT
+            count(1)
+        FROM
+            bison.sale_plan_item  spi,
+            bison.sale_plan sp
         where
-        sp.sale_plan_id = spi.sale_plan_id
-        and spi.sale_plan_item_id = iv.sale_plan_item_id
-        and iv.itme_key_id = ik.itme_key_id
-        and spi.sale_plan_item_id = #{salePlanItemId}
+            spi.sale_plan_id = sp.sale_plan_id
+            and sp.sale_plan_id = #{salePlanId}
+    </select>
+
+   <!-- <select id="findSalePlanItemList" parameterType="com.leaderment.sales.pojo.dto.FindSalesPalnListDTO" resultType="com.leaderment.sales.pojo.vo.SalePlanItemListVO">
+
+        SELECT
+            spi.sale_plan_item_id                           as salePlanItemId,
+            t1.country_name                                 as countryName,
+            t1.country_id                                   as countryId,
+            spi.product_id                                  as productId,
+            spi.last_units_avg_day                          as lastUnitsAvgDay,
+            spi.est_units_avg_day                           as estUnitsAvgDay,
+            spi.est_units_promotion                         as estUnitsPromotion,
+            spi.rationality,
+            spi.status,
+            spi.remark,
+            t1.asin,
+            t1.asin_id                                      as asinId,
+            p.product_model_number                          as productModelNumber
+        FROM
+            bison.sale_plan_item spi,
+            bison.sale_plan sp,
+            bison.product p,
+            (
+            select
+                a.asin,
+                a.asin_id,
+                upa_rel.product_id,
+                c.country_name,
+                c.country_id
+            from
+                bison_amz_product_inventory.user_product_amz_asin_rel upa_rel,
+                bison_amz_product_inventory.amz_asin a,
+                bison.country c
+            where
+                upa_rel.asin_id = a.asin_id
+                and c.country_id = upa_rel.country_id
+
+        <if test="countryIdList != null and countryIdList.size() > 0">
+            and c.country_id in
+            <foreach collection="countryIdList" item="countryId" index="index" open="(" close=")" separator=",">
+　　　　　　      #{countryId}
+    　　　　 </foreach>
+        </if>
+        <if test="productIdList != null and productIdList.size() > 0">
+            and upa_rel.product_id in
+            <foreach collection="productIdList" item="productId" index="index" open="(" close=")" separator=",">
+　　　　　　      #{productId}
+    　　　　 </foreach>
+        </if>
+            group by
+                upa_rel.asin_id,
+                upa_rel.product_id,
+                c.country_id
+            ) t1
+        where
+            spi.sale_plan_id = sp.sale_plan_id
+            and spi.product_id = p.product_id
+            and t1.product_id = p.product_id
+            and spi.country = t1.country_id
+        <if test="status != 0 and status != null">
+            and spi.status = #{status}
+        </if>
+            and sp.sale_plan_id = #{salePlanId}
+    </select>-->
+
+    <select id="findSalePlanItemList" parameterType="com.leaderment.sales.pojo.dto.FindSalesPalnListDTO" resultType="com.leaderment.sales.pojo.vo.SalePlanItemListVO">
+        select
+            t1.*,
+            c.country_name                                  as countryName,
+            p.product_model_number                          as productModelNumber,
+            a.asin
+
+        FROM
+            (SELECT
+            spi.sale_plan_item_id                           as salePlanItemId,
+            spi.country                                     as countryId,
+            spi.product_id                                  as productId,
+            spi.status,
+            spi.remark,
+            spi.est_units_promotion                         as estUnitsPromotion,
+            rel.asin_id                                     as asinId
+            FROM bison.sale_plan sp
+            left join bison.sale_plan_item spi
+            on sp.sale_plan_id = spi.sale_plan_id
+            left join  bison_amz_product_inventory.user_product_amz_asin_rel rel
+            on spi.product_id =  rel.product_id  and spi.country = rel.country_id
+            #and spi.user_id = rel.user_charge_id
+
+            and sp.sale_plan_id = #{salePlanId}
+            <if test="countryIdList != null and countryIdList.size() > 0">
+                and spi.country_id in
+                <foreach collection="countryIdList" item="countryId" index="index" open="(" close=")" separator=",">
+                    　　　　　　      #{countryId}
+                    　　　　 </foreach>
+            </if>
+            <if test="productIdList != null and productIdList.size() > 0">
+                and spi.product_id in
+                <foreach collection="productIdList" item="productId" index="index" open="(" close=")" separator=",">
+                    　　　　　　      #{productId}
+                    　　　　 </foreach>
+            </if>
+
+            <if test="status != 0 and status != null">
+                and spi.status = #{status}
+            </if>
+
+            group by spi.sale_plan_item_id,spi.country,spi.product_id,rel.asin_id) t1
+
+            left join  bison.product p on t1.productId =  p.product_id
+            left join  bison.country c on t1.countryId =  c.country_id
+            left join  bison_amz_product_inventory.amz_asin a on t1.asinId = a.asin_id
+
 
     </select>
+
+    <select id="findItemValBySalePlanItemId" resultType="com.leaderment.sales.pojo.vo.ItemValVO">
+        SELECT
+            ik.item_key_id              as itemKeyId,
+            ik.item_key                 as itemKey,
+            iv.item_val_id              as itemValId,
+            iv.item_val                 as itemVal,
+            ik.type,
+            ik.status,
+            ik.last_day_val             as lastDayVal
+
+        FROM
+            bison.sale_plan_item spi,
+            bison.item_key ik,
+            bison.item_val iv
+        WHERE
+            spi.sale_plan_item_id = iv.sale_plan_item_id
+            AND iv.item_key_id = ik.item_key_id
+            AND spi.sale_plan_item_id = #{salePlanItemId}
+    </select>
+
+    <select id="getlastUnitsOrderedSum" resultType="java.lang.Integer">
+        SELECT
+            sum(units_ordered)
+        FROM
+            bison_reports.amz_report_conversion_rate
+        where
+        asin_id = #{asinId}
+        and country_id = #{countryId}
+        <if test="lastDayVal != 0">
+            and DATE_SUB(CURDATE(), INTERVAL #{lastDayVal} DAY) <![CDATA[<=]]>  date(record_date)
+        </if>
+
+        group by asin_id;
+    </select>
+
 
 
 
