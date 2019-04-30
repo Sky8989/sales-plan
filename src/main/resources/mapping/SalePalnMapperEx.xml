@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace可以写类的全限定名，这样做的好处是
+　　sqlSession.insert(Student.class.getName()+".addStudent");
+-->
+<mapper namespace="com.leaderment.sales.mapper.mybatis.SalePalnMapperEx">
+
+
+    <select id="findAll" resultType="com.leaderment.sales.pojo.SalePlan">
+        SELECT
+            sale_plan_id as salePlanId,
+            user_id		as userId,
+            plan_date	as planDate,
+            status
+        FROM
+            bison.sale_plan
+    </select>
+
+    <select id="findItemTableHead" resultType="com.leaderment.sales.pojo.vo.ItemKey">
+        select
+            ik.itme_key_id as itmeKeyId,
+            itme_key  as itmeKey
+        from
+            bison.itme_key ik,
+            bison.user u
+        where
+            ik.business_unit_id = u.business_unit_id
+        group by
+            ik.itme_key_id
+    </select>
+
+    <select id="findSalePlanLit"  resultType="com.leaderment.sales.pojo.vo.SalePlanVO">
+        SELECT
+            spi.country ,
+            spi.model_no as modelNo,
+            spi.sale_plan_item_id as salePlanItemId
+
+        FROM
+            bison.sale_plan  sp,
+            bison.sale_plan_item  spi
+        where
+            sp.sale_plan_id = spi.sale_plan_id
+
+
+    </select>
+
+    <select id="findSalePlanItemLit" resultType="com.leaderment.sales.pojo.vo.ItemValVO">
+        SELECT
+        ik.itme_key_id as itmeKeyId,
+        ik.itme_key as itmeKey,
+        ik.itme_key_ratio as itmeKeyRatio,
+        iv.itme_val_id as itmeValId,
+        iv.itme_val as itmeVal
+        FROM
+        bison.sale_plan  sp,
+        bison.sale_plan_item  spi,
+        bison.itme_key ik,
+        bison.itme_val iv
+
+        where
+        sp.sale_plan_id = spi.sale_plan_id
+        and spi.sale_plan_item_id = iv.sale_plan_item_id
+        and iv.itme_key_id = ik.itme_key_id
+        and spi.sale_plan_item_id = #{salePlanItemId}
+
+    </select>
+
+
+
+</mapper>
