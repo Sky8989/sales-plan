@@ -69,6 +69,19 @@ public class SalePlanItemListVO {
     private List<ItemValVO> ItemValVOList;
 
 
+    /**
+     * 当前itemkey的对应规则id
+     */
+    private  int salesVolumeRuleId;
+
+    public int getSalesVolumeRuleId() {
+        return salesVolumeRuleId;
+    }
+
+    public void setSalesVolumeRuleId(int salesVolumeRuleId) {
+        this.salesVolumeRuleId = salesVolumeRuleId;
+    }
+
     public int getCountryId() {
         return countryId;
     }
@@ -206,6 +219,8 @@ public class SalePlanItemListVO {
                 ", productId=" + productId +
                 ", userId=" + userId +
                 ", countryName='" + countryName + '\'' +
+                ", countryId=" + countryId +
+                ", asinId=" + asinId +
                 ", asin='" + asin + '\'' +
                 ", lastUnitsAvgDay=" + lastUnitsAvgDay +
                 ", estUnitsAvgDay=" + estUnitsAvgDay +
@@ -215,6 +230,7 @@ public class SalePlanItemListVO {
                 ", remark='" + remark + '\'' +
                 ", productModelNumber='" + productModelNumber + '\'' +
                 ", ItemValVOList=" + ItemValVOList +
+                ", salesVolumeRuleId=" + salesVolumeRuleId +
                 '}';
     }
 }

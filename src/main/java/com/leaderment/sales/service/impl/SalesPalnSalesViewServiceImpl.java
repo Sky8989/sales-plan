@@ -3,6 +3,7 @@ package com.leaderment.sales.service.impl;
 import com.leaderment.sales.mapper.jpa.SalePlanMapper;
 import com.leaderment.sales.mapper.jpa.SalesVolumeRuleItemKeyRelMapper;
 import com.leaderment.sales.mapper.jpa.UserMapper;
+import com.leaderment.sales.mapper.mybatis.ProductSubscriptionMapperEx;
 import com.leaderment.sales.mapper.mybatis.SalePalnMapperEx;
 import com.leaderment.sales.mapper.mybatis.SalesVolumeMapperEx;
 import com.leaderment.sales.mapper.mybatis.SalesVolumeRuleItemKeyRelMapperEx;
@@ -14,7 +15,11 @@ import com.leaderment.sales.service.SalesPalnSalesViewService;
 import com.leaderment.sales.util.entity.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -36,6 +41,9 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
     @Autowired
     SalesVolumeRuleItemKeyRelMapperEx salesVolumeRuleItemKeyRelMapperEx;
 
+    @Autowired
+    ProductSubscriptionMapperEx productSubscriptionMapperEx;
+
 
 
 
@@ -52,8 +60,11 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
 
         List<SalePlan> salePlanList = salePlanMapper.findByUserId(userId);
 
+        DateFormat  df2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
         for (SalePlan saleplan :salePlanList) {
-            saleplan.setShowSalePlan(saleplan.getPlanDate().split(" ")[0].concat(" " + user.getUserName() + "销售计划"));
+            String str = df2.format(saleplan.getPlanDate());
+            saleplan.setShowSalePlan(str.split(" ")[0].concat(" " + user.getUserName() + "销售计划"));
         }
         resultBean.setData(salePlanList);
 
@@ -83,24 +94,8 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
                     List<ItemValVO>  itemValVOList =  salePalnMapperEx.findItemValBySalePlanItemId(salePlanItemId);
                     System.out.println("itemValVOList === " + itemValVOList);
 
-                    /**
-                     * 历史销量 总和
-                     *//*
-                    int lastSaleVolumeSum = 0;
-                    *//**
-                     * 历史销量*比率 总和
-                     *//*
-                    double lastSaleVolumeRatioSum = 0.0;
-                    *//**
-                     * 预测销量 总和
-                     *//*
-                    int estSaleVolumeSum = 0;
-                    *//**
-                     * 预测销量*比率 总和
-                     *//*
-                    double estSaleVolumeRatioSum = 0.0;*/
-                    // 历史7天 历史30天 预测7天 预测14天 预测30天
-                    System.out.println("=====历史7天 历史30天 预测7天 预测14天 预测30天");
+
+                    //1:获取规则
                     for(ItemValVO  itemValVO : itemValVOList){
                         //历史销量
                         System.out.println("============历史销量");
@@ -117,48 +112,83 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
                             //通过销量去查询对应规则 sales_volume_rule
                             SalesVolumeRule  salesVolumeRule = salesVolumeMapperEx.findByItemKeyIdAndSales(itemValVO.getItemKeyId(),lastUnitsOrderSum);
 
-                            //拿到当前一组数据的比率
-                            List<SalesVolumeRuleItemKeyRel>  salesVolumeRuleItemKeyRel =  salesVolumeRuleItemKeyRelMapper.findBySalesVolumeRuleId(salesVolumeRule.getSalesVolumeRuleId());
-
-                            //添加比率
-                            for (SalesVolumeRuleItemKeyRel rel : salesVolumeRuleItemKeyRel){
-                                if(rel.getItemKeyId() == itemValVO.getItemKeyId()){
-                                    itemValVO.setItemKeyRatio(rel.getItemKeyRatio());
-                                }
-                            }
-
+                            //拿到对应规则 放入到当前 salePlanItem中
+                            if(salesVolumeRule != null){
+                                salePlanItem.setSalesVolumeRuleId(salesVolumeRule.getSalesVolumeRuleId());
                             }
                         }
-
-
+                    }
+                    //通过规则id 获取一组比率
+                    List<SalesVolumeRuleItemKeyRel>  salesVolumeRuleItemKeyRel =  salesVolumeRuleItemKeyRelMapperEx.findBySalesVolumeRuleId(salePlanItem.getSalesVolumeRuleId());
+                    System.out.println("salesVolumeRuleItemKeyRel ====" + salesVolumeRuleItemKeyRel);
+                    //2:添加比率
+                    for(ItemValVO  itemValVO2 : itemValVOList){
+                        for (SalesVolumeRuleItemKeyRel rel : salesVolumeRuleItemKeyRel){
+                            if(rel.getItemKeyId() == itemValVO2.getItemKeyId()){
+                                System.out.println("rel.getItemKeyRatio() ====" + rel.getItemKeyRatio());
+                                itemValVO2.setItemKeyRatio(rel.getItemKeyRatio());
+                                break;
+                            }
+                        }
+                    }
                     salePlanItem.setItemValVOList(itemValVOList);
                 }
 
                 //第二次 计算比率
-               for(SalePlanItemListVO salePlanItem2 : salePlanItemListVOList){
-                       int salePlanItemId = salePlanItem2.getSalePlanItemId();
+                for(SalePlanItemListVO salePlanItem2 : salePlanItemListVOList){
                        //自定义的列 和对应值
-                       List<ItemValVO>  itemValVOList =  salePalnMapperEx.findItemValBySalePlanItemId(salePlanItemId);
+                       List<ItemValVO>  itemValVOList =  salePlanItem2.getItemValVOList();
                        System.out.println("itemValVOList === " + itemValVOList);
 
-                       /**
-                        * 历史销量 总和
-                        */
-                       int lastSaleVolumeSum = 0;
                        /**
                         * 历史销量*比率 总和
                         */
                        double lastSaleVolumeRatioSum = 0.0;
-                       /**
-                        * 预测销量 总和
-                        */
-                       int estSaleVolumeSum = 0;
+
                        /**
                         * 预测销量*比率 总和
                         */
                        double estSaleVolumeRatioSum = 0.0;
-                       // 历史7天 历史30天 预测7天 预测14天 预测30天
-                       System.out.println("=====历史7天 历史30天 预测7天 预测14天 预测30天");
+                       //历史销量求和 预测销量求和
+                       for(ItemValVO  itemValVO : itemValVOList){
+                           if(itemValVO.getType() == 1){
+                               int lastSales = Integer.parseInt(itemValVO.getItemVal());
+                              // lastSaleVolumeSum += lastSales;
+                               lastSaleVolumeRatioSum += lastSales * itemValVO.getItemKeyRatio();
+                           }else if(itemValVO.getType() == 2){
+                               int estSales = Integer.parseInt(itemValVO.getItemVal());
+                             //  estSaleVolumeSum += estSales;
+                               estSaleVolumeRatioSum += estSales * itemValVO.getItemKeyRatio();
+                           }
+                       }
+
+                       System.out.println("========计算加权后历史日均");
+                       System.out.println("========lastSaleVolumeRatioSum = " + lastSaleVolumeRatioSum);
+                       //计算加权后历史日均
+                       salePlanItem2.setLastUnitsAvgDay((int)lastSaleVolumeRatioSum);
+
+                       System.out.println("========计算加权后预测日均");
+                       System.out.println("========estSaleVolumeRatioSum = " + estSaleVolumeRatioSum);
+                       //计算加权后预测日均
+                       salePlanItem2.setEstUnitsAvgDay((int)estSaleVolumeRatioSum);
+
+                       System.out.println("========合理性计算");
+                       //合理性计算
+                       System.out.println("========salePlanItem.getLastUnitsAvgDay() = " + salePlanItem2.getLastUnitsAvgDay());
+                       System.out.println("========salePlanItem.getEstUnitsAvgDay()" + salePlanItem2.getEstUnitsAvgDay());
+                       salePlanItem2.setRationality(salePlanItem2.getLastUnitsAvgDay() == 0  ? 0 : (salePlanItem2.getEstUnitsAvgDay() - salePlanItem2.getLastUnitsAvgDay()) / salePlanItem2.getLastUnitsAvgDay());
+                   }
+                resultBean.setData(salePlanItemListVOList);
+
+               }else{
+                   //1.2不存在拿userId去查询当前负责的产品
+                   int userId = findSalesPalnListDTO.getUserId();
+                   List<SalePlanItemListVO> salePlanItemList  = productSubscriptionMapperEx.findByUserChargeId(userId);
+                    //计算历史销量 并通过对应规则id 拿到对应比率
+                   for (SalePlanItemListVO salePlanItem: salePlanItemList){
+
+                       List<ItemValVO>  itemValVOList =  salePalnMapperEx.findItemValByUserId(userId);
+                        //1:计算历史销量
                        for(ItemValVO  itemValVO : itemValVOList){
                            //历史销量
                            System.out.println("============历史销量");
@@ -166,91 +196,67 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
                                int lastDayVal = itemValVO.getLastDayVal();
                                //计算历史销量
                                System.out.println("-------------==计算历史销量");
-                               Integer lastUnitsOrderSum = salePalnMapperEx.getlastUnitsOrderedSum(lastDayVal,salePlanItem2.getAsinId(),salePlanItem2.getCountryId());
+                               Integer lastUnitsOrderSum = salePalnMapperEx.getlastUnitsOrderedSum(lastDayVal,salePlanItem.getAsinId(),salePlanItem.getCountryId());
                                lastUnitsOrderSum = lastUnitsOrderSum == null ? 0 : lastUnitsOrderSum;
                                System.out.println("历史销量 ==" + lastUnitsOrderSum);
                                itemValVO.setItemVal(lastUnitsOrderSum.toString());
-                               lastSaleVolumeSum += lastUnitsOrderSum;
-                           }else if(itemValVO.getType() == 2){
-                               estSaleVolumeSum += Integer.parseInt(itemValVO.getItemVal());
-                           }
 
-                           List<SalesVolumeRule>  salesVolumeRuleList  = salesVolumeMapperEx.findByItemKeyId(itemValVO.getItemKeyId());
-                           /**
-                            * 销量规则Id 对应整个 itemValVOList
-                            */
-                           int salesVolumeRuleId = 0;
-                           //指定某一个历史7天 对应的所有规则 0-10 10-30 30-60 60-100 ....
-                           System.out.println("===========指定某一个历史7天 对应的所有规则 0-10 10-30 30-60 60-100 ....");
-                           for (SalesVolumeRule salesVolumeRule : salesVolumeRuleList) {
-                               int min = salesVolumeRule.getMinSalesVolume();
-                               int max = salesVolumeRule.getMaxSalesVolume();
-                               System.out.println("=== " + salesVolumeRule.getSalesVolumeRuleId());
-                               System.out.println("==== min ==" + min);
-                               System.out.println("==== max ==" + max);
+                               //通过销量去查询对应规则 sales_volume_rule
+                               SalesVolumeRule  salesVolumeRule = salesVolumeMapperEx.findByItemKeyIdAndSales(itemValVO.getItemKeyId(),lastUnitsOrderSum);
 
-                               //找到参考历史日均
-                               if(itemValVO.getItemKeyId() == salesVolumeRule.getItemKeyId()){
-                                   System.out.println("=========找到参考历史日均");
-                                   if(itemValVO.getType() == 1) {
-                                       int lastSaleVolume = Integer.parseInt(itemValVO.getItemVal());
-                                       System.out.println("====lastSaleVolume ===" + lastSaleVolume);
-                                       //判断历史日均对应那个 sales_volume_rule_id
-                                       System.out.println("====判断历史日均对应那个 sales_volume_rule_id");
-                                       if(lastSaleVolume >= min && lastSaleVolume <= max){
-                                           salesVolumeRuleId =  salesVolumeRule.getSalesVolumeRuleId();
-                                       }
-                                   }
-                                   break;
-                               }
-                           }
-
-                           System.out.println("====salesVolumeRuleId = " + salesVolumeRuleId);
-                           System.out.println("======通过 salesVolumeRuleId 查询出当前itemValVOList 下各自的比率");
-                           //通过 salesVolumeRuleId 查询出当前itemValVOList 下各自的比率
-                           List<SalesVolumeRuleItemKeyRel> SalesVolumeRuleItemKeyRelList = salesVolumeRuleItemKeyRelMapperEx.findBySalesVolumeRuleId(salesVolumeRuleId);
-                           System.out.println("==========SalesVolumeRuleItemKeyRelList = " + SalesVolumeRuleItemKeyRelList);
-                           //计算出比率
-                           for(SalesVolumeRuleItemKeyRel  salesVolumeRuleItemKeyRel: SalesVolumeRuleItemKeyRelList){
-                               System.out.println("===========计算出比率");
-                               System.out.println("salesVolumeRuleItemKeyRel ==" + salesVolumeRuleItemKeyRel);
-                               if(salesVolumeRuleItemKeyRel.getItemKeyId() == itemValVO.getItemKeyId()){
-                                   if(itemValVO.getType() == 1){
-                                       lastSaleVolumeRatioSum += salesVolumeRuleItemKeyRel.getItemKeyRatio() * Integer.parseInt(itemValVO.getItemVal());
-                                       System.out.println("lastSaleVolumeRatioSum==" + lastSaleVolumeRatioSum);
-                                   }else if(itemValVO.getType() == 2){
-                                       estSaleVolumeRatioSum += salesVolumeRuleItemKeyRel.getItemKeyRatio() * Integer.parseInt(itemValVO.getItemVal());
-                                       System.out.println("estSaleVolumeRatioSum == " + estSaleVolumeRatioSum);
-                                   }
+                               //拿到对应规则 放入到当前 salePlanItem中
+                               if(salesVolumeRule != null){
+                                   salePlanItem.setSalesVolumeRuleId(salesVolumeRule.getSalesVolumeRuleId());
                                }
                            }
                        }
 
+
+                       //通过规则id 获取一组比率
+                       List<SalesVolumeRuleItemKeyRel>  salesVolumeRuleItemKeyRel =  salesVolumeRuleItemKeyRelMapperEx.findBySalesVolumeRuleId(salePlanItem.getSalesVolumeRuleId());
+                       System.out.println("salesVolumeRuleItemKeyRel ====" + salesVolumeRuleItemKeyRel);
+
+                       //2:添加比率
+                       for(ItemValVO  itemValVO2 : itemValVOList){
+                           for (SalesVolumeRuleItemKeyRel rel : salesVolumeRuleItemKeyRel){
+                               if(rel.getItemKeyId() == itemValVO2.getItemKeyId()){
+                                   System.out.println("rel.getItemKeyRatio() ====" + rel.getItemKeyRatio());
+                                   itemValVO2.setItemKeyRatio(rel.getItemKeyRatio());
+                                   break;
+                               }
+                           }
+                       }
+
+
+                       salePlanItem.setItemValVOList(itemValVOList);
+                   }
+                   //第二次计算比率
+                   for(SalePlanItemListVO salePlanItem2 : salePlanItemList){
+                       //自定义的列 和对应值
+                       List<ItemValVO>  itemValVOList =  salePlanItem2.getItemValVOList();
+                       System.out.println("itemValVOList === " + itemValVOList);
+
+                       /**
+                        * 历史销量*比率 总和
+                        */
+                       double lastSaleVolumeRatioSum = 0.0;
+                       //历史销量求和 预测销量求和
+                       for(ItemValVO  itemValVO : itemValVOList){
+                           if(itemValVO.getType() == 1){
+                               int lastSales = Integer.parseInt(itemValVO.getItemVal());
+                               // lastSaleVolumeSum += lastSales;
+                               lastSaleVolumeRatioSum += lastSales * itemValVO.getItemKeyRatio();
+                           }
+                       }
                        System.out.println("========计算加权后历史日均");
-                       System.out.println("========lastSaleVolumeSum = " + lastSaleVolumeSum);
-                       System.out.println("========lastSaleVolumeSum = " + lastSaleVolumeRatioSum);
+                       System.out.println("========lastSaleVolumeRatioSum = " + lastSaleVolumeRatioSum);
                        //计算加权后历史日均
-                       salePlanItem2.setLastUnitsAvgDay(lastSaleVolumeSum == 0 ? 0:(int)lastSaleVolumeRatioSum/lastSaleVolumeSum);
+                       salePlanItem2.setLastUnitsAvgDay((int)lastSaleVolumeRatioSum);
 
-                       System.out.println("========计算加权后预测日均");
-                       System.out.println("========lastSaleVolumeSum = " + estSaleVolumeSum);
-                       System.out.println("========lastSaleVolumeSum = " + estSaleVolumeRatioSum);
-                       //计算加权后预测日均
-                       salePlanItem2.setLastUnitsAvgDay(estSaleVolumeSum == 0 ? 0 : (int)estSaleVolumeRatioSum/estSaleVolumeSum);
 
-                       System.out.println("========合理性计算");
-                       //合理性计算
-                       System.out.println("========salePlanItem.getLastUnitsAvgDay() = " + salePlanItem2.getLastUnitsAvgDay());
-                       System.out.println("========salePlanItem.getEstUnitsAvgDay()" + salePlanItem2.getEstUnitsAvgDay());
-                       salePlanItem2.setRationality(salePlanItem2.getLastUnitsAvgDay() == 0  ? 0 : (salePlanItem2.getEstUnitsAvgDay() - salePlanItem2.getLastUnitsAvgDay()) / salePlanItem.getLastUnitsAvgDay());
-
-                       salePlanItem2.setItemValVOList(itemValVOList);
                    }
 
-                   resultBean.setData(salePlanItemListVOList);
-
-               }else{
-                   //1.2不存在拿userId去查询当前负责的产品
+                   resultBean.setData(salePlanItemList);
                }
 
            }else {
@@ -258,6 +264,46 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
                resultBean.setCode(500);
            }
         }
+
+        return resultBean;
+    }
+
+    @Transactional
+    @Override
+    public ResultBean addSalesPlan(SalePlan salePlan) {
+        ResultBean resultBean = new ResultBean();
+        if(salePlan == null){
+            resultBean.setMsg("新增失败,保存的对象为空");
+            resultBean.setCode(500);
+            return resultBean;
+        }
+        if(salePlan.getUserId() == 0){
+            resultBean.setMsg("新增失败,用户为空");
+            resultBean.setCode(500);
+            return resultBean;
+        }
+        //判断当前月是否存在销售计划 存在提示不能添加
+        DateFormat  df = new SimpleDateFormat("yyyy-MM");
+
+        String time  = df.format(salePlan.getPlanDate());
+        Integer num = salePalnMapperEx.isExistSalePaln(salePlan.getUserId(),time);
+
+        if(num != null && num > 0){
+            resultBean.setMsg("新增失败, " + df.format(salePlan.getPlanDate()) + "月已存在销售计划,请勿重复添加!!!");
+            resultBean.setCode(500);
+            return resultBean;
+        }
+
+        salePlan.setStatus("1");
+        //新增销售计划
+        SalePlan  resultSalePlan = salePlanMapper.save(salePlan);
+        if(resultSalePlan != null){
+            resultBean = findSalesPlanByUserId(resultSalePlan.getUserId());
+            resultBean.setMsg("新增销售计划成功");
+        }
+
+
+
 
         return resultBean;
     }

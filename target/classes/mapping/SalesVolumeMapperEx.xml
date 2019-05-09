@@ -27,6 +27,18 @@
             svr.sales_volume_rule_id in (t1.sales_volume_rule_id)
     </select>
 
+    <select id="findByItemKeyIdAndSales"  resultType="com.leaderment.sales.pojo.SalesVolumeRule">
+        SELECT
+            sales_volume_rule_id	as salesVolumeRuleId,
+            item_key_id	        as itemKeyId
+        FROM
+            bison.sales_volume_rule
+        where
+            item_key_id = #{itemKeyId}
+            and (min_sales_volume <![CDATA[<]]>  #{lastUnitsOrderSum} and #{lastUnitsOrderSum}  <![CDATA[<=]]> max_sales_volume )
+
+    </select>
+
 
 
 

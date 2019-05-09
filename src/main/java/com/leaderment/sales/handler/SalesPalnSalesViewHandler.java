@@ -6,6 +6,8 @@ import com.leaderment.sales.mapper.mybatis.SalePalnMapperEx;
 import com.leaderment.sales.pojo.SalePlan;
 import com.leaderment.sales.pojo.ItemKey;
 import com.leaderment.sales.pojo.dto.FindSalesPalnListDTO;
+import com.leaderment.sales.pojo.vo.AddSalesVolumeRuleAllVO;
+import com.leaderment.sales.pojo.vo.AddSalesVolumeRuleVO;
 import com.leaderment.sales.pojo.vo.ItemValVO;
 import com.leaderment.sales.pojo.vo.SalePlanVO;
 import com.leaderment.sales.service.ItemKeyService;
@@ -22,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -47,8 +50,8 @@ public class SalesPalnSalesViewHandler {
 
     @ApiOperation(value = "创建销售计划")
     @PostMapping("/addSalesPlan")
-    public ResultBean addSalesPlan(HttpServletResponse response, HttpServletRequest request) {
-        ResultBean result = new ResultBean();
+    public ResultBean addSalesPlan(@RequestBody SalePlan salePlan) {
+        ResultBean result = salesPalnSalesViewService.addSalesPlan(salePlan);
         return result;
     }
 

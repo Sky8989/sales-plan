@@ -1,6 +1,8 @@
 package com.leaderment.sales.pojo;
 
 
+import javax.persistence.*;
+
 /**
  * @ClassName SalesVolumeRule
  * @Description TODO
@@ -9,29 +11,39 @@ package com.leaderment.sales.pojo;
  * @Version 1.0
  **/
 
+@Entity
+@Table(name = "sales_volume_rule", schema = "bison")
 public class SalesVolumeRule {
 
+
+    @Id
+    @Column(name = "sales_volume_rule_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int salesVolumeRuleId;
 
     /**
      * 参考当前 历史日均的值 计算
      */
+
+    @Column(name = "item_key_id", nullable = false)
     private int itemKeyId;
 
-    private String ruleName;
 
     /**
      * 销量范围最小值
      */
+    @Column(name = "min_sales_volume", nullable = false)
     private int minSalesVolume;
     /**
      * 销量范围最大值
      */
+    @Column(name = "max_sales_volume", nullable = false)
     private int maxSalesVolume;
 
     /**
      * 比率
      */
+    @Transient
     private double itemKeyRatio;
 
     public int getSalesVolumeRuleId() {
@@ -50,13 +62,6 @@ public class SalesVolumeRule {
         this.itemKeyId = itemKeyId;
     }
 
-    public String getRuleName() {
-        return ruleName;
-    }
-
-    public void setRuleName(String ruleName) {
-        this.ruleName = ruleName;
-    }
 
     public int getMinSalesVolume() {
         return minSalesVolume;
@@ -87,7 +92,6 @@ public class SalesVolumeRule {
         return "SalesVolumeRule{" +
                 "salesVolumeRuleId=" + salesVolumeRuleId +
                 ", itemKeyId=" + itemKeyId +
-                ", ruleName='" + ruleName + '\'' +
                 ", minSalesVolume=" + minSalesVolume +
                 ", maxSalesVolume=" + maxSalesVolume +
                 ", itemKeyRatio=" + itemKeyRatio +

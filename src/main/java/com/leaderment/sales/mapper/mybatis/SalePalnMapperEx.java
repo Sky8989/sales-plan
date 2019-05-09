@@ -28,4 +28,8 @@ public interface SalePalnMapperEx {
     List<ItemValVO> findItemValBySalePlanItemId(int salePlanItemId);
 
     Integer getlastUnitsOrderedSum(@Param("lastDayVal") int lastDayVal, @Param("asinId")int asinId,  @Param("countryId")int countryId);
+
+    List<ItemValVO> findItemValByUserId(int userId);
+
+    int isExistSalePaln(@Param("userId") int userId, @Param("time") String format);
 }

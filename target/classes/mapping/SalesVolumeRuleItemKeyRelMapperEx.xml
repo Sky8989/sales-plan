@@ -19,6 +19,11 @@
 
     </select>
 
+    <insert id="saveAndGetId" parameterType="com.leaderment.sales.pojo.SalesVolumeRuleItemKeyRel"
+            useGeneratedKeys="true" keyProperty="sales_volume_rule_id">
+        insert into bison.sales_volume_rule_item_key_rel values (#{salesVolumeRuleId},#{itemKeyId},#{itemKeyRatio})
+    </insert>
+
 
 
 

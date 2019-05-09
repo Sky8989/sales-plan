@@ -1,10 +1,7 @@
 package com.leaderment.sales.pojo;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "item_key", schema = "bison")
@@ -12,6 +9,7 @@ public class ItemKey {
 
     @Id
     @Column(name = "item_key_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int itemKeyId;
 
     @Column(name = "item_key", nullable = false)
@@ -28,6 +26,17 @@ public class ItemKey {
 
     @Column(name = "last_day_val")
     private Integer lastDayVal;
+
+    @Transient
+    private Integer userId;
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 
     public Integer getLastDayVal() {
         return lastDayVal;

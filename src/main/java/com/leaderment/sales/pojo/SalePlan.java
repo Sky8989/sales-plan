@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.util.Date;
 
 
 /**
@@ -24,8 +25,9 @@ public class SalePlan {
     private int userId;
 
     @Column(name = "plan_date", nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss") //前端入参
-    private String planDate;
+    @DateTimeFormat(pattern = "yyyy-MM") //前端入参
+    private Date planDate;
+//    private String planDate;
 
     @Column(name = "status", nullable = false)
     private String status;
@@ -61,11 +63,20 @@ public class SalePlan {
         this.userId = userId;
     }
 
-    public String getPlanDate() {
+//    public String getPlanDate() {
+//        return planDate;
+//    }
+//
+//    public void setPlanDate(String planDate) {
+//        this.planDate = planDate;
+//    }
+
+
+    public Date getPlanDate() {
         return planDate;
     }
 
-    public void setPlanDate(String planDate) {
+    public void setPlanDate(Date planDate) {
         this.planDate = planDate;
     }
 

@@ -49,6 +49,17 @@ public class User {
         return userPassword;
     }
 
+    @Column(name = "business_unit_id", nullable = false)
+    private int businessUnitId;
+
+    public int getBusinessUnitId() {
+        return businessUnitId;
+    }
+
+    public void setBusinessUnitId(int businessUnitId) {
+        this.businessUnitId = businessUnitId;
+    }
+
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
     }

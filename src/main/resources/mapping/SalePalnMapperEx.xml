@@ -128,22 +128,22 @@
             a.asin
 
         FROM
-            (SELECT
-            spi.sale_plan_item_id                           as salePlanItemId,
-            spi.country                                     as countryId,
-            spi.product_id                                  as productId,
-            spi.status,
-            spi.remark,
-            spi.est_units_promotion                         as estUnitsPromotion,
-            rel.asin_id                                     as asinId
-            FROM bison.sale_plan sp
-            left join bison.sale_plan_item spi
-            on sp.sale_plan_id = spi.sale_plan_id
-            left join  bison_amz_product_inventory.user_product_amz_asin_rel rel
-            on spi.product_id =  rel.product_id  and spi.country = rel.country_id
-            #and spi.user_id = rel.user_charge_id
+            (
+            SELECT spi.sale_plan_item_id as salePlanItemId,
+            spi.country as countryId, spi.product_id as productId,
+            spi.status, spi.remark, spi.est_units_promotion as estUnitsPromotion,
+            rel.asin_id as asinId
+            FROM
+            bison.sale_plan sp,
+            bison.sale_plan_item spi ,
+            bison_amz_product_inventory.user_product_amz_asin_rel rel
+            where
+            spi.product_id = rel.product_id
+            and sp.sale_plan_id = spi.sale_plan_id
+            and spi.country = rel.country_id
 
             and sp.sale_plan_id = #{salePlanId}
+
             <if test="countryIdList != null and countryIdList.size() > 0">
                 and spi.country_id in
                 <foreach collection="countryIdList" item="countryId" index="index" open="(" close=")" separator=",">
@@ -203,6 +203,35 @@
         </if>
 
         group by asin_id;
+    </select>
+
+    <select id="findItemValByUserId" resultType="com.leaderment.sales.pojo.vo.ItemValVO">
+
+        select
+            ik.item_key_id      as itemKeyId,
+            ik.item_key         as itemKey,
+            ik.last_day_val     as lastDayVal,
+            ik.type,
+            ik.status
+
+        from
+            bison.user u,
+            bison.item_key ik
+
+        where
+            u.business_unit_id = ik.business_unit_id
+            and u.user_id = #{userId}
+    </select>
+
+
+    <select id="isExistSalePaln" resultType="java.lang.Integer">
+        SELECT
+            count(1)
+        FROM
+            bison.sale_plan
+        WHERE
+        user_id  = #{userId}
+        AND plan_date like  concat('',#{time},'%')
     </select>
 
 

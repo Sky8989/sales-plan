@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--namespace可以写类的全限定名，这样做的好处是
+　　sqlSession.insert(Student.class.getName()+".addStudent");
+-->
+<mapper namespace="com.leaderment.sales.mapper.mybatis.ProductSubscriptionMapperEx">
+
+    <select id="findByUserChargeId" resultType="com.leaderment.sales.pojo.vo.SalePlanItemListVO">
+        select
+            t1.product_id	as productId,
+            t1.country_id	as countryId,
+            t1.asin_id		as asinId,
+            c.country_name	as countryName,
+            p.product_model_number	as productModelNumber,
+            a.asin
+        from
+            bison.country c,
+            bison.product p,
+            bison_amz_product_inventory.amz_asin  a ,
+            (SELECT
+            product_id, country_id, asin_id
+            FROM
+            bison_amz_product_inventory.user_product_amz_asin_rel
+            WHERE
+            user_charge_id = #{userChargeId}
+            GROUP BY product_id , country_id , asin_id) t1
+
+        where
+            c.country_id = t1.country_id
+            and p.product_id = t1.product_id
+            and a.asin_id = t1.asin_id
+
+
+    </select>
+
+
+
+</mapper>

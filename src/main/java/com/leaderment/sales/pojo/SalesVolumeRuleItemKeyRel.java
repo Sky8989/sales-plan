@@ -1,10 +1,7 @@
 package com.leaderment.sales.pojo;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @ClassName SalesVolumeRuleItemKeyRel
@@ -24,6 +21,7 @@ public class SalesVolumeRuleItemKeyRel {
     /**
      * 参考当前 历史日均的值 计算
      */
+
     @Column(name = "item_key_id", nullable = false)
     private int itemKeyId;
 
