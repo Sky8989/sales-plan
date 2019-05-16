@@ -39,19 +39,28 @@ public class ItemKeyHandler {
     @ApiOperation(value = "添加自定义列")
     @PostMapping("/addItemKey")
     public ResultBean addItemKey(@RequestBody ItemKey itemKey) {
-       // System.out.println("======salePlan == " + salePlan);
+        System.out.println("ItemKey = " +itemKey);
         ResultBean result = itemKeyService.addItemKey(itemKey);
         return result;
     }
 
-    @ApiOperation(value = "添加自定义列")
-    @GetMapping("/findItemKeyAndInfoList")
-    public ResultBean findItemKeyAndInfoList() {
-        // System.out.println("======salePlan == " + salePlan);
-        ResultBean result = itemKeyService.findItemKeyAndInfoList();
-
+    @ApiOperation(value = "通过 itemKeyId 更改 自定义列 的状态")
+    @GetMapping("/updateItemKeyStatus/{itemKeyId}")
+    public ResultBean deleteItemKey(@PathVariable  int itemKeyId) {
+        System.out.println("itemKeyId = " +itemKeyId);
+        ResultBean result = itemKeyService.UpdateItemKeyStatus(itemKeyId);
         return result;
     }
+
+    @ApiOperation(value = "修改自定义列")
+    @PostMapping("/updateItemKey")
+    public ResultBean updateItemKey(@RequestBody ItemKey itemKey) {
+        System.out.println("ItemKey = " +itemKey);
+        ResultBean result = itemKeyService.updateItemKey(itemKey);
+        return result;
+    }
+
+
 
 
 

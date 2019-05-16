@@ -2,6 +2,7 @@ package com.leaderment.sales.pojo;
 
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * @ClassName SalesVolumeRuleItemKeyRel
@@ -57,6 +58,22 @@ public class SalesVolumeRuleItemKeyRel {
 
     public void setItemKeyRatio(double itemKeyRatio) {
         this.itemKeyRatio = itemKeyRatio;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SalesVolumeRuleItemKeyRel that = (SalesVolumeRuleItemKeyRel) o;
+        return salesVolumeRuleId == that.salesVolumeRuleId &&
+                itemKeyId == that.itemKeyId &&
+                Double.compare(that.itemKeyRatio, itemKeyRatio) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(salesVolumeRuleId, itemKeyId, itemKeyRatio);
     }
 
     @Override

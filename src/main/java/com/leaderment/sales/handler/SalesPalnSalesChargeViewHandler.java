@@ -1,23 +1,21 @@
 package com.leaderment.sales.handler;
 
 
-import com.leaderment.sales.mapper.jpa.SalePlanMapper;
-import com.leaderment.sales.mapper.mybatis.SalePalnMapperEx;
-import com.leaderment.sales.pojo.dto.FindSalesPalnListDTO;
+
+import com.leaderment.sales.pojo.dto.UpdateRowSalesVolumeRuleDTO;
 import com.leaderment.sales.pojo.vo.AddSalesVolumeRuleAllVO;
-import com.leaderment.sales.service.ItemKeyService;
+
+import com.leaderment.sales.pojo.vo.DeleteRowSalesVolumeRuleVO;
+import com.leaderment.sales.pojo.vo.UpdateRowSalesVolumeRuleVO;
 import com.leaderment.sales.service.SalesPalnSalesChargeViewService;
-import com.leaderment.sales.service.SalesPalnSalesViewService;
+
+import com.leaderment.sales.service.SalesVolumeRuleItemKeyRelService;
 import com.leaderment.sales.util.entity.ResultBean;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 
 /**
@@ -34,6 +32,8 @@ public class SalesPalnSalesChargeViewHandler {
     @Autowired
     SalesPalnSalesChargeViewService salesPalnSalesChargeViewService;
 
+
+
     @ApiOperation(value = "创建销量规则表")
     @PostMapping("/addSalesVolumeRule")
     public ResultBean addSalesVolumeRule(@RequestBody AddSalesVolumeRuleAllVO addSalesVolumeRuleAllVO) {
@@ -41,7 +41,41 @@ public class SalesPalnSalesChargeViewHandler {
         System.out.println("======addSalesVolumeRuleAllVO.getRatioList == " +
                 addSalesVolumeRuleAllVO.getSalesVolumeItemKeyRelList());
 
-        ResultBean result =  salesPalnSalesChargeViewService.addSalesVolumeRule(addSalesVolumeRuleAllVO);
+        ResultBean result =  new ResultBean();
+//        ResultBean result =  salesPalnSalesChargeViewService.addSalesVolumeRule(addSalesVolumeRuleAllVO);
+        return result;
+    }
+
+    @ApiOperation(value = "修改数据前 获取所有销量规则以及比率")
+    @GetMapping("/getAllSalesVolumeRuleByUserId/{userId}")
+    public ResultBean getAllSalesVolumeRuleByUserId(@PathVariable int userId) {
+        System.out.println("userId = " + userId);
+        //ResultBean result =  salesPalnSalesChargeViewService.getAllSalesVolumeRuleByUserId(userId);
+        ResultBean result =  salesPalnSalesChargeViewService.getAll(userId);
+        return result;
+    }
+
+
+    @ApiOperation(value = "修改 某规则 对应的一行比率 以及合理性")
+    @PostMapping("/updateRowSalesVolumeRule")
+    public ResultBean updateRowSalesVolumeRule(@RequestBody UpdateRowSalesVolumeRuleDTO updateRowSalesVolumeRuleDTO) {
+        System.out.println("======updateRowSalesVolumeRuleDTO == " + updateRowSalesVolumeRuleDTO);
+        System.out.println("======updateRowSalesVolumeRuleDTO.list == " +
+                updateRowSalesVolumeRuleDTO.getSalesVolumeRuleRatioList() );
+
+      //  ResultBean result =  new ResultBean();
+        ResultBean result =  salesPalnSalesChargeViewService.updateRowSalesVolumeRule(updateRowSalesVolumeRuleDTO);
+        return result;
+    }
+
+    @ApiOperation(value = "删除一个 规则 以及对应比率 ")
+    @DeleteMapping("/deleteRowSalesVolumeRule/{salesVolumeRuleId}")
+    public ResultBean deleteRowSalesVolumeRule(@PathVariable int salesVolumeRuleId) {
+        System.out.println("======salesVolumeRuleId == " + salesVolumeRuleId);
+
+
+        //  ResultBean result =  new ResultBean();
+        ResultBean result =  salesPalnSalesChargeViewService.deleteRowSalesVolumeRule(salesVolumeRuleId);
         return result;
     }
 

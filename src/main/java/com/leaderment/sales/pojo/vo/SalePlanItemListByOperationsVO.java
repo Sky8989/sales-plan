@@ -1,54 +1,39 @@
 package com.leaderment.sales.pojo.vo;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.List;
 
 
 /**
- * @ClassName SalePlanItemListVO
+ * @ClassName SalePlanItemListByOperationsVO  运营列表展示视图
  * @Description TODO
  * @Author Lee
  * @Date 19-4-26 下午4:03
  * @Version 1.0
  **/
 
-public class SalePlanItemListVO {
+public class SalePlanItemListByOperationsVO {
 
     private int salePlanItemId;
 
 
     private int salePlanId;
 
-    private int userId;
-
-
-    private int  asinId;
-
-    private int status;
 
     private int productId;
 
-    private int  countryId;
 
-    private List<ItemValVO> ItemValVOList;
-
-
-    /**
-     * 当前itemkey的对应规则id
-     */
-    private  int salesVolumeRuleId;
-
+    private int userId;
 
 
 
     private String  countryName;
 
-    private String productModelNumber;
+    private int  countryId;
+
+    private int  asinId;
 
     private String  asin;
+
 
     /**
      * 加权后 历史日均
@@ -67,13 +52,72 @@ public class SalePlanItemListVO {
     private int estUnitsPromotion;
 
 
-    /**
-     * 合理性
-     */
-    private int rationality;
+
+
+    private int status;
 
     private String remark;
 
+    private String productModelNumber;
+
+    private List<ItemValVO> ItemValVOList;
+
+
+    /**
+     * 总安全天数 = [亚马逊安全天数+深圳仓安全天数+供应商安全天数]
+     */
+    private int totalSafetyDay;
+
+
+
+
+    /**
+     * 当前itemkey的对应规则id
+     */
+    private  int salesVolumeRuleId;
+
+    /**
+     * amz 当前产品总数  (可卖/清点中/在途)
+     * @return
+     */
+    private int amzProductNumberSum;
+
+    /**
+     * 深圳仓 产品总和
+     * @return
+     */
+    private int  localProductNumberSum;
+
+    /**
+     * 供应商 产品总和 (可发数量/未清订单)
+     * @return
+     */
+    private int supplierProductNumberSum;
+
+
+    public int getAmzProductNumberSum() {
+        return amzProductNumberSum;
+    }
+
+    public void setAmzProductNumberSum(int amzProductNumberSum) {
+        this.amzProductNumberSum = amzProductNumberSum;
+    }
+
+    public int getLocalProductNumberSum() {
+        return localProductNumberSum;
+    }
+
+    public void setLocalProductNumberSum(int localProductNumberSum) {
+        this.localProductNumberSum = localProductNumberSum;
+    }
+
+    public int getSupplierProductNumberSum() {
+        return supplierProductNumberSum;
+    }
+
+    public void setSupplierProductNumberSum(int supplierProductNumberSum) {
+        this.supplierProductNumberSum = supplierProductNumberSum;
+    }
 
     public int getSalesVolumeRuleId() {
         return salesVolumeRuleId;
@@ -164,13 +208,7 @@ public class SalePlanItemListVO {
         this.estUnitsPromotion = estUnitsPromotion;
     }
 
-    public int getRationality() {
-        return rationality;
-    }
 
-    public void setRationality(int rationality) {
-        this.rationality = rationality;
-    }
 
     public int getStatus() {
         return status;
@@ -214,24 +252,27 @@ public class SalePlanItemListVO {
 
     @Override
     public String toString() {
-        return "SalePlanItemListVO{" +
+        return "SalePlanItemListByOperationsVO{" +
                 "salePlanItemId=" + salePlanItemId +
                 ", salePlanId=" + salePlanId +
-                ", userId=" + userId +
-                ", asinId=" + asinId +
-                ", status=" + status +
                 ", productId=" + productId +
-                ", countryId=" + countryId +
-                ", ItemValVOList=" + ItemValVOList +
-                ", salesVolumeRuleId=" + salesVolumeRuleId +
+                ", userId=" + userId +
                 ", countryName='" + countryName + '\'' +
-                ", productModelNumber='" + productModelNumber + '\'' +
+                ", countryId=" + countryId +
+                ", asinId=" + asinId +
                 ", asin='" + asin + '\'' +
                 ", lastUnitsAvgDay=" + lastUnitsAvgDay +
                 ", estUnitsAvgDay=" + estUnitsAvgDay +
                 ", estUnitsPromotion=" + estUnitsPromotion +
-                ", rationality=" + rationality +
+            //    ", rationality=" + rationality +
+                ", status=" + status +
                 ", remark='" + remark + '\'' +
+                ", productModelNumber='" + productModelNumber + '\'' +
+                ", ItemValVOList=" + ItemValVOList +
+                ", salesVolumeRuleId=" + salesVolumeRuleId +
+                ", amzProductNumberSum=" + amzProductNumberSum +
+                ", localProductNumberSum=" + localProductNumberSum +
+                ", supplierProductNumberSum=" + supplierProductNumberSum +
                 '}';
     }
 }

@@ -2,19 +2,19 @@ package com.leaderment.sales.service.impl;
 
 
 import com.leaderment.sales.mapper.jpa.ItemKeyMapper;
-import com.leaderment.sales.mapper.jpa.SalesVolumeRuleItemKeyRelMapper;
 import com.leaderment.sales.mapper.jpa.SalesVolumeRuleMapper;
 import com.leaderment.sales.mapper.jpa.UserMapper;
 import com.leaderment.sales.mapper.mybatis.ItemKeyMapperEx;
+import com.leaderment.sales.mapper.mybatis.SalesVolumeRuleMapperEx;
 import com.leaderment.sales.mapper.mybatis.SalesVolumeRuleItemKeyRelMapperEx;
 import com.leaderment.sales.pojo.ItemKey;
 import com.leaderment.sales.pojo.SalesVolumeRule;
 import com.leaderment.sales.pojo.SalesVolumeRuleItemKeyRel;
 import com.leaderment.sales.pojo.User;
-import com.leaderment.sales.pojo.vo.AddItemKeyVO;
-import com.leaderment.sales.pojo.vo.AddSalesVolumeRuleAllVO;
-import com.leaderment.sales.pojo.vo.AddSalesVolumeRuleVO;
+import com.leaderment.sales.pojo.dto.UpdateRowSalesVolumeRuleDTO;
+import com.leaderment.sales.pojo.vo.*;
 import com.leaderment.sales.service.SalesPalnSalesChargeViewService;
+import com.leaderment.sales.service.SalesVolumeRuleItemKeyRelService;
 import com.leaderment.sales.util.entity.ResultBean;
 import org.apache.commons.collections.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +30,8 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
     @Autowired
     ItemKeyMapperEx itemKeyMapperEx;
     @Autowired
+    SalesVolumeRuleMapperEx salesVolumeMapperEx;
+    @Autowired
     ItemKeyMapper itemKeyMapper;
 
     @Autowired
@@ -39,10 +41,10 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
     @Autowired
     SalesVolumeRuleMapper salesVolumeRuleMapper;
     @Autowired
-    SalesVolumeRuleItemKeyRelMapper salesVolumeRuleItemKeyRelMapper;
-    @Autowired
     SalesVolumeRuleItemKeyRelMapperEx salesVolumeRuleItemKeyRelMapperEx;
 
+    @Autowired
+    SalesVolumeRuleItemKeyRelService salesVolumeRuleItemKeyRelService;
 
     @Transactional
     @Override
@@ -71,10 +73,10 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
         /**
          *新增 ItemKey后返回 列表
          */
-        List<ItemKey> ItemKeyDb = new ArrayList<ItemKey>(addItemKeyVOList.size());
+        List<ItemKey> itemKeyDbList = new ArrayList<ItemKey>(addItemKeyVOList.size());
 
         /**
-         * key itemKey  val itemKeyId
+         * key itemKey-type  val itemKeyId
          */
         Map<String,Integer> itemKeyDbMap = new HashedMap(addItemKeyVOList.size());
         for(AddItemKeyVO addItemKeyVO : addItemKeyVOList){
@@ -87,8 +89,8 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
 
             //判断数据是否存在,存在不添加
            itemKeyMapper.save(itemKey);
-           ItemKeyDb.add(itemKey);
-           itemKeyDbMap.put(itemKey.getItemKey(),itemKey.getItemKeyId());
+            itemKeyDbList.add(itemKey);
+           itemKeyDbMap.put(itemKey.getItemKey()+"-"+itemKey.getType(),itemKey.getItemKeyId());
         }
         //3: 拿到itemKeyId  在添加销售规则  返回规则Id salesVolumeRuleId
         List<AddSalesVolumeRuleVO> addSalesVolumeRuleVOList =  addSalesVolumeRuleAllVO.getSalesVolumeList();
@@ -101,7 +103,7 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
             SalesVolumeRule salesVolumeRule = new SalesVolumeRule();
             salesVolumeRule.setMinSalesVolume(addSalesVolumeRuleVO.getMinSalesVolume());
             salesVolumeRule.setMaxSalesVolume(addSalesVolumeRuleVO.getMaxSalesVolume());
-            for(ItemKey itemKeyDb : ItemKeyDb){
+            for(ItemKey itemKeyDb : itemKeyDbList){
                 //通过itemKey 找到id
                 if(itemKeyDb.getItemKey().equals(addSalesVolumeRuleVO.getItemKey())){
                     salesVolumeRule.setItemKeyId(itemKeyDb.getItemKeyId());
@@ -114,14 +116,17 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
             SalesVolumeRuleDbMap.put(key,salesVolumeRule.getSalesVolumeRuleId());
 
         }
+        System.out.println("SalesVolumeRuleDbMap = " + SalesVolumeRuleDbMap);
 
         //4:通过 销量关系(min,max) 获得对应的 salesVolumeRuleId 去新增 销售规则与iteemKeyId的关系 存下比率
         /**
-         *  min-max-itemKey=ratio
+         *  min-max-itemKey-type=ratio
          */
         List<Object> strList  = addSalesVolumeRuleAllVO.getSalesVolumeItemKeyRelList();
       //  Map<String,Double> map = new HashMap<>();
+        System.out.println("strList ==" + strList);
         for (Object str : strList){
+            System.out.println("str ==" + str);
             SalesVolumeRuleItemKeyRel salesVolumeRuleItemKeyRel = new SalesVolumeRuleItemKeyRel();
             String[] strArray = str.toString().split("=");
             for(int i = 0; i < strArray.length; i++){
@@ -138,9 +143,9 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
                     System.out.println("ratio = " + ratio);
                     salesVolumeRuleItemKeyRel.setItemKeyRatio(ratio);
 
-                    if(strArr != null && strArr.length == 3){
+                    if(strArr != null && strArr.length == 4){
                         int salesVolumeRuleId =  SalesVolumeRuleDbMap.get(strArr[0]+"-"+strArr[1]);
-                        int itemKeyId  = itemKeyDbMap.get(strArr[2]);
+                        int itemKeyId  = itemKeyDbMap.get(strArr[2]+"-"+strArr[3]);
                         salesVolumeRuleItemKeyRel.setSalesVolumeRuleId(salesVolumeRuleId);
                         salesVolumeRuleItemKeyRel.setItemKeyId(itemKeyId);
                         System.out.println("itemKeyId =" + itemKeyId);
@@ -165,16 +170,243 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
         }
 
         resultBean.setMsg("新增规则成功");
-         //   System.out.println("map ==" + map);
-         //   Set<String> set =  map.keySet();
+        return resultBean;
+    }
 
-//            for(String key : set){
-//                System.out.println("key ==" + key);
-//                System.out.println("val ==" + map.get(key));
-//            }
+    @Override
+    public ResultBean getAllSalesVolumeRuleByUserId(int userId) {
+        ResultBean resultBean = new ResultBean();
+       User user = userMapper.findByUserId(userId);
+        System.out.println("user = " + user);
+
+        Map<String,Object> resultMap = new HashMap<>(3);
+
+       if(user == null){
+           resultBean.setMsg("不存在当前用户,请重新登录");
+           resultBean.setCode(500);
+           return resultBean;
+       }
+        /**
+         * 自定义列名 list
+         */
+       List<ItemKey> itemKeyList = itemKeyMapper.getByBusinessUnitIdAndStatus(user.getBusinessUnitId(),1);
+
+       if(itemKeyList == null || itemKeyList.size() == 0){
+           resultBean.setMsg("新增");
+           resultBean.setCode(500);
+           return resultBean;
+       }
+
+
+
+        System.out.println("itemKeyList = " + itemKeyList);
+        //resultMap.put("itemKeyList",itemKeyList);
+
+        /**
+         * 用来 显示自定义列名
+         *
+         */
+        List<UpdateItemKeyVO> updateItemKeyVOList = new ArrayList<>(itemKeyList.size());
+
+        /**
+         * 规则 list
+         */
+       List<UpdateSalesVolumeRuleVO> updateSalesVolumeRuleVOList = new ArrayList<UpdateSalesVolumeRuleVO>();
+
+       for(ItemKey itemKey : itemKeyList){
+           UpdateItemKeyVO updateItemKeyVO = new UpdateItemKeyVO();
+           updateItemKeyVO.setType(itemKey.getType());
+           updateItemKeyVO.setItemKeyId(itemKey.getItemKeyId());
+           updateItemKeyVO.setItemKey(itemKey.getItemKey());
+           if(itemKey.getType() == 1){
+               List<UpdateSalesVolumeRuleVO> dbSalesVolumeRuleList =  salesVolumeMapperEx.findByUpdateSalesVolumeRuleVOItemKeyId(itemKey.getItemKeyId());
+               System.out.println("dbSalesVolumeRuleList ==" + dbSalesVolumeRuleList);
+               if(dbSalesVolumeRuleList != null && dbSalesVolumeRuleList.size() > 0){
+                   updateSalesVolumeRuleVOList.addAll(dbSalesVolumeRuleList);
+               }
+           }
+           updateItemKeyVOList.add(updateItemKeyVO);
+       }
+
+
+       // System.out.println("salesVolumeRuleList = " + salesVolumeRuleList);
+        resultMap.put("salesVolumeRuleList",updateSalesVolumeRuleVOList);
+        /**
+         * 销量规则 与 itemKey 关系实体 存比率
+         */
+        List<SalesVolumeRuleItemKeyRel> salesVolumeRuleItemKeyRelList = new ArrayList<>();
+        for(UpdateSalesVolumeRuleVO salesVolumeRule : updateSalesVolumeRuleVOList){
+            List<SalesVolumeRuleItemKeyRel> dbSalesVolumeRuleItemKeyRelList = salesVolumeRuleItemKeyRelMapperEx.findBySalesVolumeRuleId(salesVolumeRule.getSalesVolumeRuleId());
+            System.out.println("dbSalesVolumeRuleItemKeyRelList ==" + dbSalesVolumeRuleItemKeyRelList);
+            if(dbSalesVolumeRuleItemKeyRelList != null && dbSalesVolumeRuleItemKeyRelList.size() > 0){
+                salesVolumeRuleItemKeyRelList.addAll(dbSalesVolumeRuleItemKeyRelList);
+            }
+        }
+        System.out.println("salesVolumeRuleItemKeyRelList ===" + salesVolumeRuleItemKeyRelList);
+
+        //存比率
+        for (SalesVolumeRuleItemKeyRel salesVolumeRuleItemKeyRel : salesVolumeRuleItemKeyRelList){
+            for (UpdateItemKeyVO itemKey : updateItemKeyVOList){
+                if(itemKey.getItemKeyId() == salesVolumeRuleItemKeyRel.getItemKeyId()){
+                    SalesVolumeRule salesVolumeRule =  salesVolumeRuleMapper.findOne(salesVolumeRuleItemKeyRel.getSalesVolumeRuleId());
+                    System.out.println("salesVolumeRule == " + salesVolumeRule);
+                    if(salesVolumeRule != null){
+                        int min =  salesVolumeRule.getMinSalesVolume();
+                        int max =  salesVolumeRule.getMaxSalesVolume();
+                        String key = min + "-" + max + "-" + itemKey.getItemKey() + "-" + itemKey.getType();
+                        double ratio = salesVolumeRuleItemKeyRel.getItemKeyRatio();
+                        itemKey.getRatioList().add(key+":"+ratio);
+                        System.out.println("key ==" + key);
+                        System.out.println("value ==" + ratio);
+                        System.out.println("itemKey ===" + itemKey);
+                        break;
+                    }
+                }
+            }
+        }
+        System.out.println("updateItemKeyVOList ===" + updateItemKeyVOList);
+        resultMap.put("itemKeyList",updateItemKeyVOList);
+
+        //resultMap.put("salesVolumeRuleItemKeyRelList",updateItemKeyVOList);
+
+        resultBean.setData(resultMap);
+        return resultBean;
+    }
+
+    @Transactional
+    @Override
+    public ResultBean updateRowSalesVolumeRule(UpdateRowSalesVolumeRuleDTO updateRowSalesVolumeRuleDTO) {
+
+        ResultBean resultBean = new ResultBean();
+
+        resultBean = checkUpdateRowSalesVolumeRuleVO(updateRowSalesVolumeRuleDTO);
+        if(resultBean.getCode() == 500){
+            return resultBean;
+        }
+        SalesVolumeRule salesVolumeRule =  new SalesVolumeRule(updateRowSalesVolumeRuleDTO.getSalesVolumeRuleId(),updateRowSalesVolumeRuleDTO.getRationality());
+        SalesVolumeRule salesVolumeRuleDb = salesVolumeRuleMapper.findOne(salesVolumeRule.getSalesVolumeRuleId());
+
+        //不相等进行修改
+        if(salesVolumeRule.getRationality() != salesVolumeRuleDb.getRationality()){
+            int num = salesVolumeMapperEx.updateRationalityById(salesVolumeRule);
+            if(num < 0){
+                resultBean.setCode(500);
+                resultBean.setMsg("修改失败,修改合理性失败");
+                System.out.println("修改合理性失败!!");
+            }else{
+                System.out.println("修改合理性成功!!");
+                resultBean.setMsg("修改成功!");
+            }
+        }
+
+        //和数据库中的 比率 进行对比是否修改
+        List<SalesVolumeRuleItemKeyRel> salesVolumeRuleItemKeyRelList =  updateRowSalesVolumeRuleDTO.getSalesVolumeRuleRatioList();
+        for(SalesVolumeRuleItemKeyRel salesVolumeRuleItemKeyRel : salesVolumeRuleItemKeyRelList){
+            int salesVolumeRuleId = salesVolumeRuleItemKeyRel.getSalesVolumeRuleId();
+            int itemKeyId = salesVolumeRuleItemKeyRel.getItemKeyId();
+            SalesVolumeRuleItemKeyRel salesVolumeRuleItemKeyRelDb = salesVolumeRuleItemKeyRelMapperEx.findBySalesVolumeRuleIdAndItemKeyId(salesVolumeRuleItemKeyRel);
+            if(salesVolumeRuleItemKeyRelDb != null){
+                //同一个id下比率对比
+                if(salesVolumeRuleId == salesVolumeRuleItemKeyRelDb.getSalesVolumeRuleId() && itemKeyId == salesVolumeRuleItemKeyRelDb.getItemKeyId()){
+                    //不相等进行修改
+                    if(salesVolumeRuleItemKeyRel.getItemKeyRatio() != salesVolumeRuleItemKeyRelDb.getItemKeyRatio()){
+                        System.out.println("修改比率  salesVolumeRuleItemKeyRel== " + salesVolumeRuleItemKeyRel);
+                        int num = salesVolumeRuleItemKeyRelMapperEx.updateItemKeyRatioBySalesVolumeRuleIdAndItemKeyId(salesVolumeRuleItemKeyRel);
+                        if(num > 0){
+                            System.out.println("修改比率成功 === ");
+                            resultBean.setMsg("修改成功!");
+                        }else{
+                            //修改失败
+                            resultBean.setCode(500);
+                            System.out.println("修改比率失败 === ");
+                            resultBean.setMsg("修改失败,修改比率失败");
+                        }
+                    }
+                }
+
+            }
+        }
+
+        ItemKey itemKeyDb = itemKeyMapper.findOne( updateRowSalesVolumeRuleDTO.getItemKeyId());
+        //最后查最新的数据
+        if(itemKeyDb != null){
+            resultBean.setData(salesVolumeRuleItemKeyRelService.getShowItemKeyAndSalesVolumeRuleAllVOByBusinessUnitId(itemKeyDb.getBusinessUnitId()));
+        }
+
+
 
         return resultBean;
     }
+
+    @Transactional
+    @Override
+    public ResultBean deleteRowSalesVolumeRule(int salesVolumeRuleId) {
+        ResultBean resultBean  = new ResultBean();
+
+        if(salesVolumeRuleId == 0 ){
+            resultBean.setCode(500);
+            resultBean.setMsg("上传的id为空,删除失败!!");
+        }
+        //先删除比率 在删除规则
+            //通过salesVolumeRuleId 删除一组比率
+           int num = salesVolumeRuleItemKeyRelMapperEx.deleteBySalesVolumeRuleId(salesVolumeRuleId);
+
+           if(num > 0){
+
+                int num1  =   salesVolumeMapperEx.deleteBySalesVolumeRuleIdAndItemKeyId(salesVolumeRuleId);
+                if(num1 > 0){
+                    resultBean.setMsg("删除成功!!");
+                }else{
+                    resultBean.setCode(500);
+                    resultBean.setMsg("删除一行规则失败!!");
+                }
+           }else{
+               resultBean.setCode(500);
+               resultBean.setMsg("删除一组比率失败!!");
+           }
+
+        return resultBean;
+    }
+
+    @Override
+    public ResultBean getAll(int userId) {
+        ResultBean resultBean  = new ResultBean();
+
+        resultBean.setData(salesVolumeRuleItemKeyRelService.getShowItemKeyAndSalesVolumeRuleAllVO(userId));
+
+        return resultBean;
+    }
+
+    private ResultBean checkUpdateRowSalesVolumeRuleVO(UpdateRowSalesVolumeRuleDTO updateRowSalesVolumeRuleDTO) {
+        ResultBean resultBean = new ResultBean();
+
+        if(updateRowSalesVolumeRuleDTO == null || updateRowSalesVolumeRuleDTO.getSalesVolumeRuleRatioList() == null ||
+               updateRowSalesVolumeRuleDTO.getSalesVolumeRuleRatioList().size() == 0){
+            resultBean.setCode(500);
+            resultBean.setMsg("上传的数据为空,修改失败!");
+            return resultBean;
+        } if( updateRowSalesVolumeRuleDTO.getRationality() == 0  ){
+            resultBean.setCode(500);
+            resultBean.setMsg("合理性为空,修改失败!");
+            return resultBean;
+        }if( updateRowSalesVolumeRuleDTO.getSalesVolumeRuleId() == 0){
+            resultBean.setCode(500);
+            resultBean.setMsg("销量规则id为空,修改失败!");
+            return resultBean;
+        }
+        //判断规则对应ratio 数据是否正常
+        for (SalesVolumeRuleItemKeyRel salesVolumeRuleItemKeyRel: updateRowSalesVolumeRuleDTO.getSalesVolumeRuleRatioList()){
+            if(salesVolumeRuleItemKeyRel == null){
+                resultBean.setCode(500);
+                resultBean.setMsg("上传的比率数据为空,修改失败!");
+                return resultBean;
+            }
+        }
+
+        return resultBean;
+    }
+
+
 
     private ResultBean checkSalesVolumeRuleItemKeyRel(SalesVolumeRuleItemKeyRel salesVolumeRuleItemKeyRel) {
         ResultBean resultBean = new ResultBean();
@@ -188,7 +420,7 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
             resultBean.setCode(500);
             return resultBean;
         }
-        if(salesVolumeRuleItemKeyRel.getItemKeyRatio() == 0.0){
+        if(salesVolumeRuleItemKeyRel.getItemKeyRatio() < 0.0){
             resultBean.setMsg("销售规则与itemKey的比率为空,添加销售规则失败!!!");
             resultBean.setCode(500);
             return resultBean;

@@ -5,54 +5,8 @@
       <change afterPath="$PROJECT_DIR$/../mybatis-auto-create-table/src/main/java/com/example/bean/AmzAsin.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../mybatis-auto-create-table/src/main/java/com/example/bean/AmzSellerSku.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../mybatis-auto-create-table/src/main/resources/application.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/mapper/jpa/SalePlanMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/mapper/mybatis/SalePalnMapperEx.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/pojo/SalePlan.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/pojo/dto/FindSalesPalnListDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/pojo/vo/ItemValVO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/pojo/vo/SalePlanVO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/service/SalesPalnSalesViewService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/service/impl/SalesPalnSalesViewServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/mapping/SalePalnMapperEx.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../spring-boot01/src/main/java/com/sky/bean/Person.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../spring-boot01/src/main/java/com/sky/bean/TestPerson.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/handler/SalesPalnSalesViewHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/handler/SalesPalnSalesViewHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/mapper/jpa/ItemKeyMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/mapper/jpa/ItemKeyMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/mapper/mybatis/SalePalnMapperEx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/mapper/mybatis/SalePalnMapperEx.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/mapper/mybatis/SalesVolumeRuleItemKeyRelMapperEx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/mapper/mybatis/SalesVolumeRuleItemKeyRelMapperEx.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/pojo/ItemKey.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/pojo/ItemKey.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/pojo/SalePlan.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/pojo/SalePlan.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/pojo/SalesVolumeRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/pojo/SalesVolumeRule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/pojo/SalesVolumeRuleItemKeyRel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/pojo/SalesVolumeRuleItemKeyRel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/pojo/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/pojo/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/pojo/vo/SalePlanItemListVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/pojo/vo/SalePlanItemListVO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/service/ItemKeyService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/service/ItemKeyService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/service/SalesPalnSalesViewService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/service/SalesPalnSalesViewService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/service/impl/ItemKeyServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/service/impl/ItemKeyServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/service/impl/SalesPalnSalesViewServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/leaderment/sales/service/impl/SalesPalnSalesViewServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mapping/SalePalnMapperEx.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapping/SalePalnMapperEx.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mapping/SalesVolumeMapperEx.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapping/SalesVolumeMapperEx.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/mapping/SalesVolumeRuleItemKeyRelMapperEx.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/mapping/SalesVolumeRuleItemKeyRelMapperEx.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/leaderment/sales/handler/SalesPalnSalesViewHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/leaderment/sales/handler/SalesPalnSalesViewHandler.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/leaderment/sales/mapper/jpa/ItemKeyMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/leaderment/sales/mapper/jpa/ItemKeyMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/leaderment/sales/mapper/mybatis/SalePalnMapperEx.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/leaderment/sales/mapper/mybatis/SalePalnMapperEx.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/leaderment/sales/mapper/mybatis/SalesVolumeMapperEx.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/leaderment/sales/mapper/mybatis/SalesVolumeMapperEx.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/leaderment/sales/mapper/mybatis/SalesVolumeRuleItemKeyRelMapperEx.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/leaderment/sales/mapper/mybatis/SalesVolumeRuleItemKeyRelMapperEx.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/leaderment/sales/pojo/ItemKey.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/leaderment/sales/pojo/ItemKey.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/leaderment/sales/pojo/SalePlan.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/leaderment/sales/pojo/SalePlan.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/leaderment/sales/pojo/SalesVolumeRule.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/leaderment/sales/pojo/SalesVolumeRule.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/leaderment/sales/pojo/SalesVolumeRuleItemKeyRel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/leaderment/sales/pojo/SalesVolumeRuleItemKeyRel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/leaderment/sales/pojo/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/leaderment/sales/pojo/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/leaderment/sales/pojo/vo/ItemValVO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/leaderment/sales/pojo/vo/ItemValVO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/leaderment/sales/pojo/vo/SalePlanItemListVO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/leaderment/sales/pojo/vo/SalePlanItemListVO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/leaderment/sales/service/ItemKeyService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/leaderment/sales/service/ItemKeyService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/leaderment/sales/service/SalesPalnSalesViewService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/leaderment/sales/service/SalesPalnSalesViewService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/leaderment/sales/service/impl/ItemKeyServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/leaderment/sales/service/impl/ItemKeyServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/leaderment/sales/service/impl/SalesPalnSalesViewServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/leaderment/sales/service/impl/SalesPalnSalesViewServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mapping/SalePalnMapperEx.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mapping/SalePalnMapperEx.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mapping/SalesVolumeMapperEx.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mapping/SalesVolumeMapperEx.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/mapping/SalesVolumeRuleItemKeyRelMapperEx.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/mapping/SalesVolumeRuleItemKeyRelMapperEx.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/main/resources/application.yml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -90,8 +44,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/resources/mapping/SalesVolumeRuleItemKeyRelMapperEx.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="22" column="69" selection-start-line="22" selection-start-column="49" selection-end-line="22" selection-end-column="69" />
+            <state relative-caret-position="140">
+              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
             </state>
           </provider>
         </entry>
@@ -231,9 +185,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="696" />
-    <option name="y" value="212" />
-    <option name="width" value="1219" />
+    <option name="x" value="258" />
+    <option name="y" value="233" />
+    <option name="width" value="1211" />
     <option name="height" value="789" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -348,7 +302,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1557405868660" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1557485206108" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15354836" />
@@ -427,7 +381,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="51" y="25" width="1869" height="1055" extended-state="6" />
+    <frame x="51" y="25" width="1869" height="1055" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49930844" visible="true" weight="0.28359845" />
@@ -439,7 +393,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3287879" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.44816414" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.38012958" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39956802" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -991,8 +945,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/mapping/SalesVolumeRuleItemKeyRelMapperEx.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="22" column="69" selection-start-line="22" selection-start-column="49" selection-end-line="22" selection-end-column="69" />
+        <state relative-caret-position="140">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
         </state>
       </provider>
     </entry>

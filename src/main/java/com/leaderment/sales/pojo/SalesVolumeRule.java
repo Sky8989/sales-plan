@@ -28,7 +28,6 @@ public class SalesVolumeRule {
     @Column(name = "item_key_id", nullable = false)
     private int itemKeyId;
 
-
     /**
      * 销量范围最小值
      */
@@ -39,12 +38,48 @@ public class SalesVolumeRule {
      */
     @Column(name = "max_sales_volume", nullable = false)
     private int maxSalesVolume;
+    /**
+     * 合理性
+     */
+    @Column(name = "rationality", nullable = false)
+    private int rationality;
+
+
 
     /**
      * 比率
      */
     @Transient
     private double itemKeyRatio;
+
+    @Transient
+    private int  userId;
+
+    public SalesVolumeRule(){
+
+    }
+
+
+    public SalesVolumeRule(int salesVolumeRuleId, int rationality) {
+        this.salesVolumeRuleId = salesVolumeRuleId;
+        this.rationality = rationality;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getRationality() {
+        return rationality;
+    }
+
+    public void setRationality(int rationality) {
+        this.rationality = rationality;
+    }
 
     public int getSalesVolumeRuleId() {
         return salesVolumeRuleId;
@@ -94,7 +129,9 @@ public class SalesVolumeRule {
                 ", itemKeyId=" + itemKeyId +
                 ", minSalesVolume=" + minSalesVolume +
                 ", maxSalesVolume=" + maxSalesVolume +
+                ", rationality=" + rationality +
                 ", itemKeyRatio=" + itemKeyRatio +
+                ", userId=" + userId +
                 '}';
     }
 }

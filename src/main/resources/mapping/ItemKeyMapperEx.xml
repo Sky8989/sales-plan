@@ -17,7 +17,50 @@
 
     </select>
 
+    <select id="getByItemKeyAndTypeAndBusinessUnitId" resultType="java.lang.Integer" parameterType="com.leaderment.sales.pojo.ItemKey">
+        SELECT
+            COUNT(1)
+        FROM
+            bison.item_key
+        WHERE
+            item_key = #{itemKey}
+            AND type = #{type}
+            AND business_unit_id = #{businessUnitId}
+
+    </select>
+
+    <select id="findByBusinessUnitId" resultType="com.leaderment.sales.pojo.ItemKey" >
+        SELECT
+            item_key_id		    as itemKeyId,
+            item_key		    as itemKey,
+            business_unit_id    as businessUnitId,
+            type,
+            status,
+            last_day_val        as lastDayVal
+        FROM
+            bison.item_key
+        WHERE
+            business_unit_id = #{businessUnitId}
+    </select>
 
 
+    <update id="updateStatusByItemKeyId"  >
+        UPDATE bison.item_key
+            SET
+            status = #{status}
+        WHERE
+        item_key_id = #{itemKeyId}
+
+    </update>
+
+    <update id="updateItemKeyAndTypeByItemId"  parameterType="com.leaderment.sales.pojo.ItemKey">
+        UPDATE bison.item_key
+            SET
+            item_key = #{itemKey},
+            type = #{type}
+        WHERE
+            item_key_id = #{itemKeyId}
+
+    </update>
 
 </mapper>

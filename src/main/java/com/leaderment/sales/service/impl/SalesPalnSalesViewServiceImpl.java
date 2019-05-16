@@ -5,7 +5,7 @@ import com.leaderment.sales.mapper.jpa.SalesVolumeRuleItemKeyRelMapper;
 import com.leaderment.sales.mapper.jpa.UserMapper;
 import com.leaderment.sales.mapper.mybatis.ProductSubscriptionMapperEx;
 import com.leaderment.sales.mapper.mybatis.SalePalnMapperEx;
-import com.leaderment.sales.mapper.mybatis.SalesVolumeMapperEx;
+import com.leaderment.sales.mapper.mybatis.SalesVolumeRuleMapperEx;
 import com.leaderment.sales.mapper.mybatis.SalesVolumeRuleItemKeyRelMapperEx;
 import com.leaderment.sales.pojo.*;
 import com.leaderment.sales.pojo.dto.FindSalesPalnListDTO;
@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -37,7 +36,7 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
     @Autowired
     SalePalnMapperEx salePalnMapperEx;
     @Autowired
-    SalesVolumeMapperEx salesVolumeMapperEx;
+    SalesVolumeRuleMapperEx salesVolumeMapperEx;
     @Autowired
     SalesVolumeRuleItemKeyRelMapperEx salesVolumeRuleItemKeyRelMapperEx;
 

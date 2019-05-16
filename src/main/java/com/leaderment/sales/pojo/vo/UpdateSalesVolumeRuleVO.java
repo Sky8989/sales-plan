@@ -5,13 +5,18 @@ package com.leaderment.sales.pojo.vo;
 /**
  * @author leaderment
  */
-public class AddSalesVolumeRuleVO {
+public class UpdateSalesVolumeRuleVO {
 
-
-    private String itemKey;
     private int type;
+    private int itemKeyId;
+    private String itemKey;
+
     private int minSalesVolume;
     private int maxSalesVolume;
+
+
+
+    private int salesVolumeRuleId;
 
     /**
      * 合理性
@@ -26,12 +31,28 @@ public class AddSalesVolumeRuleVO {
         this.rationality = rationality;
     }
 
+    public int getSalesVolumeRuleId() {
+        return salesVolumeRuleId;
+    }
+
+    public void setSalesVolumeRuleId(int salesVolumeRuleId) {
+        this.salesVolumeRuleId = salesVolumeRuleId;
+    }
+
     public int getType() {
         return type;
     }
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public int getItemKeyId() {
+        return itemKeyId;
+    }
+
+    public void setItemKeyId(int itemKeyId) {
+        this.itemKeyId = itemKeyId;
     }
 
     public String getItemKey() {
@@ -41,6 +62,7 @@ public class AddSalesVolumeRuleVO {
     public void setItemKey(String itemKey) {
         this.itemKey = itemKey;
     }
+
 
     public int getMinSalesVolume() {
         return minSalesVolume;
@@ -60,11 +82,13 @@ public class AddSalesVolumeRuleVO {
 
     @Override
     public String toString() {
-        return "AddSalesVolumeRuleVO{" +
-                "itemKey='" + itemKey + '\'' +
-                ", type=" + type +
+        return "UpdateSalesVolumeRuleVO{" +
+                "type=" + type +
+                ", itemKeyId=" + itemKeyId +
+                ", itemKey='" + itemKey + '\'' +
                 ", minSalesVolume=" + minSalesVolume +
                 ", maxSalesVolume=" + maxSalesVolume +
+                ", salesVolumeRuleId=" + salesVolumeRuleId +
                 ", rationality=" + rationality +
                 '}';
     }

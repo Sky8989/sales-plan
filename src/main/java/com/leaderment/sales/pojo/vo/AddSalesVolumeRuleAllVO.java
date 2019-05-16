@@ -8,15 +8,16 @@ import java.util.List;
 public class AddSalesVolumeRuleAllVO {
 
 
+
     private int userId;
 
     /**
-     * 销售规则list  min-max-itemKey   itemKey参考 自定义列
+     * 销售规则list  min-max-itemKey-type   itemKey参考 自定义列
      */
     private List<AddSalesVolumeRuleVO> salesVolumeList;
 
     /**
-     * 销售规则和itemKey 关系List 结构 min-max-itemKey=ratio
+     * 销售规则和itemKey 关系List 结构 min-max-itemKey-type=ratio
      */
     private List<Object> salesVolumeItemKeyRelList;
 
