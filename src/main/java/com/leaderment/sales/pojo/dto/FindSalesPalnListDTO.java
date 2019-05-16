@@ -21,6 +21,7 @@ public class FindSalesPalnListDTO {
      * 销售计划Id
      */
     private int  salePlanId;
+    private int  businessUnitId;
 
     /**
      * 销售计划时间开始时间
@@ -38,12 +39,24 @@ public class FindSalesPalnListDTO {
      */
     private Integer status;
 
+    public int getBusinessUnitId() {
+        return businessUnitId;
+    }
+
+    public void setBusinessUnitId(int businessUnitId) {
+        this.businessUnitId = businessUnitId;
+    }
+
     public List<Integer> getCountryIdList() {
         return countryIdList;
     }
 
     public void setCountryIdList(List<Integer> countryIdList) {
         this.countryIdList = countryIdList;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public int getUserId() {

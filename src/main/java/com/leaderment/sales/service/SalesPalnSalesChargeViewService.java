@@ -1,6 +1,7 @@
 package com.leaderment.sales.service;
 
 
+import com.leaderment.sales.pojo.dto.FindSalesPalnListDTO;
 import com.leaderment.sales.pojo.dto.UpdateRowSalesVolumeRuleDTO;
 import com.leaderment.sales.pojo.vo.AddSalesVolumeRuleAllVO;
 import com.leaderment.sales.pojo.vo.DeleteRowSalesVolumeRuleVO;
@@ -23,4 +24,6 @@ public interface SalesPalnSalesChargeViewService {
     ResultBean deleteRowSalesVolumeRule(int  salesVolumeRuleId);
 
     ResultBean getAll(int userId);
+
+    ResultBean findSalePlanItemList(FindSalesPalnListDTO findSalesPalnListDTO);
 }

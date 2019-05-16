@@ -4,12 +4,8 @@ package com.leaderment.sales.handler;
 import com.leaderment.sales.mapper.jpa.SalePlanMapper;
 import com.leaderment.sales.mapper.mybatis.SalePalnMapperEx;
 import com.leaderment.sales.pojo.SalePlan;
-import com.leaderment.sales.pojo.ItemKey;
 import com.leaderment.sales.pojo.dto.FindSalesPalnListDTO;
-import com.leaderment.sales.pojo.vo.AddSalesVolumeRuleAllVO;
-import com.leaderment.sales.pojo.vo.AddSalesVolumeRuleVO;
-import com.leaderment.sales.pojo.vo.ItemValVO;
-import com.leaderment.sales.pojo.vo.SalePlanVO;
+
 import com.leaderment.sales.service.ItemKeyService;
 import com.leaderment.sales.service.SalesPalnSalesViewService;
 import com.leaderment.sales.util.entity.ResultBean;
@@ -79,11 +75,11 @@ public class SalesPalnSalesViewHandler {
     }
 
 
-    @ApiOperation(value = "查询所有ItemKey")
-    @GetMapping("/findItemKeyAll")
-    public ResultBean findItemKeyAll() {
+    @ApiOperation(value = "通过 userId 查询对应ItemKey")
+    @GetMapping("/findItemKeyAll/{userId}")
+    public ResultBean findItemKeyAll(@PathVariable int userId) {
 
-        ResultBean resultBean = itemKeyService.findAll();
+        ResultBean resultBean = itemKeyService.findAll(userId);
         return resultBean;
     }
 

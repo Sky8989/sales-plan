@@ -96,7 +96,7 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
 
                     //1:获取规则
                     for(ItemValVO  itemValVO : itemValVOList){
-                        //历史销量
+                         //历史销量
                         System.out.println("============历史销量");
                         if(itemValVO.getType() == 1){
                             int lastDayVal = itemValVO.getLastDayVal();

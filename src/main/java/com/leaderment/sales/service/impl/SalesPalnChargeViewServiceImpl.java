@@ -5,12 +5,14 @@ import com.leaderment.sales.mapper.jpa.ItemKeyMapper;
 import com.leaderment.sales.mapper.jpa.SalesVolumeRuleMapper;
 import com.leaderment.sales.mapper.jpa.UserMapper;
 import com.leaderment.sales.mapper.mybatis.ItemKeyMapperEx;
+import com.leaderment.sales.mapper.mybatis.SalePalnMapperEx;
 import com.leaderment.sales.mapper.mybatis.SalesVolumeRuleMapperEx;
 import com.leaderment.sales.mapper.mybatis.SalesVolumeRuleItemKeyRelMapperEx;
 import com.leaderment.sales.pojo.ItemKey;
 import com.leaderment.sales.pojo.SalesVolumeRule;
 import com.leaderment.sales.pojo.SalesVolumeRuleItemKeyRel;
 import com.leaderment.sales.pojo.User;
+import com.leaderment.sales.pojo.dto.FindSalesPalnListDTO;
 import com.leaderment.sales.pojo.dto.UpdateRowSalesVolumeRuleDTO;
 import com.leaderment.sales.pojo.vo.*;
 import com.leaderment.sales.service.SalesPalnSalesChargeViewService;
@@ -36,6 +38,10 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
 
     @Autowired
     UserMapper userMapper;
+
+
+    @Autowired
+    SalePalnMapperEx salePalnMapperEx;
 
 
     @Autowired
@@ -373,6 +379,55 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
         ResultBean resultBean  = new ResultBean();
 
         resultBean.setData(salesVolumeRuleItemKeyRelService.getShowItemKeyAndSalesVolumeRuleAllVO(userId));
+
+        return resultBean;
+    }
+
+    @Override
+    public ResultBean findSalePlanItemList(FindSalesPalnListDTO findSalesPalnListDTO) {
+        int userId = findSalesPalnListDTO.getUserId();
+        ResultBean resultBean = new ResultBean();
+
+        if(userId == 0){
+            resultBean.setCode(500);
+            resultBean.setMsg("传入的用户id为空!");
+            return resultBean;
+        }
+        User user = userMapper.findByUserId(userId);
+        if(user == null){
+            resultBean.setCode(500);
+            resultBean.setMsg("不存在当前用户!");
+            return resultBean;
+        }
+
+        int businessUnitId = user.getBusinessUnitId();
+
+        if(businessUnitId == 0){
+            resultBean.setCode(500);
+            resultBean.setMsg("当前用户不属于某一个BU!");
+            return resultBean;
+        }
+
+        //1:通过buId 查询对应的 itemKey
+        List<ItemKey> itemKeyList = itemKeyMapper.getByBusinessUnitIdAndStatus(businessUnitId,1);
+
+
+
+        //直接通过BUId 查询 salePlanItem List
+        findSalesPalnListDTO.setBusinessUnitId(businessUnitId);
+        List<SalePlanItemListVO> salePlanItemList =  salePalnMapperEx.findSalePlanItemListByBusinessUnitId(findSalesPalnListDTO);
+
+
+        System.out.printf("salePlanItemList ==" + salePlanItemList);
+
+
+
+
+
+
+        resultBean.setData(salePlanItemList);
+
+
 
         return resultBean;
     }

@@ -235,6 +235,64 @@
     </select>
 
 
+    <select id="findSalePlanItemListByBusinessUnitId" parameterType="com.leaderment.sales.pojo.dto.FindSalesPalnListDTO" resultType="com.leaderment.sales.pojo.vo.SalePlanItemListVO">
+        select
+        t1.*,
+        c.country_name                                  as countryName,
+        p.product_model_number                          as productModelNumber,
+        a.asin
+
+        FROM
+        (
+            SELECT
+            spi.sale_plan_item_id as salePlanItemId,
+            spi.country as countryId,
+            spi.product_id as productId,
+            spi.status, spi.remark,
+            spi.est_units_promotion as estUnitsPromotion,
+            rel.asin_id as asinId,
+            u.user_id as userId,
+            u.user_name as userName
+            FROM
+            bison.sale_plan sp,
+            bison.sale_plan_item spi ,
+            bison_amz_product_inventory.user_product_amz_asin_rel rel,
+            bison.user u
+            where
+            spi.product_id = rel.product_id
+            and sp.sale_plan_id = spi.sale_plan_id
+            and spi.country = rel.country_id
+            and spi.user_id = u.user_id
+            and u.business_unit_id = #{businessUnitId}
+
+        <if test="countryIdList != null and countryIdList.size() > 0">
+            and spi.country_id in
+            <foreach collection="countryIdList" item="countryId" index="index" open="(" close=")" separator=",">
+                　　　　　　      #{countryId}
+                　　　　 </foreach>
+        </if>
+        <if test="productIdList != null and productIdList.size() > 0">
+            and spi.product_id in
+            <foreach collection="productIdList" item="productId" index="index" open="(" close=")" separator=",">
+                　　　　　　      #{productId}
+                　　　　 </foreach>
+        </if>
+
+        <if test="status != 0 and status != null">
+            and spi.status = #{status}
+        </if>
+
+            group by spi.sale_plan_item_id,spi.country,spi.product_id,rel.asin_id
+
+       ) t1
+
+        left join  bison.product p on t1.productId =  p.product_id
+        left join  bison.country c on t1.countryId =  c.country_id
+        left join  bison_amz_product_inventory.amz_asin a on t1.asinId = a.asin_id
+
+
+    </select>
+
 
 
 </mapper>

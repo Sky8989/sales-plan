@@ -32,4 +32,6 @@ public interface SalePalnMapperEx {
     List<ItemValVO> findItemValByUserId(int userId);
 
     int isExistSalePaln(@Param("userId") int userId, @Param("time") String format);
+
+    List<SalePlanItemListVO> findSalePlanItemListByBusinessUnitId(FindSalesPalnListDTO findSalesPalnListDTO);
 }

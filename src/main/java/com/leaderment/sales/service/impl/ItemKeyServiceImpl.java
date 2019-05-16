@@ -46,9 +46,20 @@ public class ItemKeyServiceImpl implements ItemKeyService {
 
 
     @Override
-    public ResultBean findAll() {
+    public ResultBean findAll(int userId) {
         ResultBean resultBean = new ResultBean();
-        List<ItemKey> itemKeyList =   itemKeyMapper.findAll();
+
+        User user = userMapper.findByUserId(userId);
+
+        if(user == null){
+            resultBean.setCode(500);
+            resultBean.setMsg("不存在当前用户!");
+            return resultBean;
+        }
+        /**
+         * 没有被禁用 itemKey
+         */
+        List<ItemKey> itemKeyList =   itemKeyMapper.getByBusinessUnitIdAndStatus(user.getBusinessUnitId(),1);
 
         if(itemKeyList != null){
             resultBean.setData(itemKeyList);

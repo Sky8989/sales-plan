@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ItemKeyService {
 
-    ResultBean findAll();
+    ResultBean findAll(int userId);
 
     ResultBean addItemKey(ItemKey itemKey);
 

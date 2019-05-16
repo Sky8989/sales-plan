@@ -2,6 +2,7 @@ package com.leaderment.sales.handler;
 
 
 
+import com.leaderment.sales.pojo.dto.FindSalesPalnListDTO;
 import com.leaderment.sales.pojo.dto.UpdateRowSalesVolumeRuleDTO;
 import com.leaderment.sales.pojo.vo.AddSalesVolumeRuleAllVO;
 
@@ -76,6 +77,16 @@ public class SalesPalnSalesChargeViewHandler {
 
         //  ResultBean result =  new ResultBean();
         ResultBean result =  salesPalnSalesChargeViewService.deleteRowSalesVolumeRule(salesVolumeRuleId);
+        return result;
+    }
+
+
+    @ApiOperation(value = "查询 当前BU下的所有用户 的销售计划子项List")
+    @PostMapping("/findSalePlanItemList")
+    public ResultBean findSalePlanItemList(@RequestBody FindSalesPalnListDTO findSalesPalnListDTO) {
+        System.out.println("findSalesPalnListDTO = " + findSalesPalnListDTO);
+        //ResultBean result =  salesPalnSalesChargeViewService.getAllSalesVolumeRuleByUserId(userId);
+        ResultBean result =  salesPalnSalesChargeViewService.findSalePlanItemList(findSalesPalnListDTO);
         return result;
     }
 
