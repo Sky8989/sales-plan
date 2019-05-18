@@ -430,6 +430,8 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
                 System.out.println("strings " + Arrays.toString(strings));
 
                 SalePlanItem salePlanItem = new SalePlanItem(salePlanId,userId);
+                //初始化 为1
+                salePlanItem.setStatus(1);
                 salePlanItem.setRemark(strings[strings.length-1]);
                 salePlanItem.setRemark(strings[strings.length-3]);
                // salePlanItem.setCountry();

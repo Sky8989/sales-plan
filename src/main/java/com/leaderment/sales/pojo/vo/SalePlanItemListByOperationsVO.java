@@ -69,8 +69,6 @@ public class SalePlanItemListByOperationsVO {
     private int totalSafetyDay;
 
 
-
-
     /**
      * 当前itemkey的对应规则id
      */
@@ -94,6 +92,13 @@ public class SalePlanItemListByOperationsVO {
      */
     private int supplierProductNumberSum;
 
+    public int getTotalSafetyDay() {
+        return totalSafetyDay;
+    }
+
+    public void setTotalSafetyDay(int totalSafetyDay) {
+        this.totalSafetyDay = totalSafetyDay;
+    }
 
     public int getAmzProductNumberSum() {
         return amzProductNumberSum;

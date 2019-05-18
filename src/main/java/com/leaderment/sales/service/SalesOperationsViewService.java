@@ -2,6 +2,10 @@ package com.leaderment.sales.service;
 
 
 
+import com.leaderment.sales.pojo.dto.FindSalesPalnListDTO;
+import com.leaderment.sales.pojo.vo.SalePlanItemListByOperationsVO;
+import com.leaderment.sales.util.entity.ResultBean;
+
 /**
  * 运营 Service
  */
@@ -9,5 +13,5 @@ package com.leaderment.sales.service;
 public interface SalesOperationsViewService {
 
 
-
+    ResultBean findSalePlanItemList(FindSalesPalnListDTO findSalesPalnListDTO);
 }

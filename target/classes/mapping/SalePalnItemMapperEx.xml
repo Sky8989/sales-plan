@@ -10,6 +10,36 @@
       SELECT count(1) from bison.sale_plan_item where sale_plan_id = #{salePlanId}
     </select>
 
+    <select id="findSalePlanItemListByOperationsVOByBusinessUnitId" resultType="com.leaderment.sales.pojo.vo.SalePlanItemListByOperationsVO">
+      SELECT
+        spi.sale_plan_item_id AS salePlanItemId,
+        spi.country AS countryId,
+        c.country_name AS countryName,
+        spi.product_id AS productId,
+        p.product_model_number AS productModelNumber,
+        spi.STATUS,
+        spi.remark,
+        spi.est_units_promotion AS estUnitsPromotion,
+        u.user_id AS userId,
+        up.total_safety_day as totalSafetyDay
+        #u.user_name AS userName
+    FROM
+        bison.sale_plan sp,
+        bison.sale_plan_item spi,
+        bison. USER u,
+        bison.country c,
+        bison.product p,
+        bison_amz_product_inventory.user_products up
+    WHERE
+        spi.product_id = p.product_id
+        and p.product_id = up.product_id
+        and sp.sale_plan_id = spi.sale_plan_id
+        AND spi.country = c.country_id
+        AND spi.user_id = u.user_id
+        AND u.business_unit_id = #{businessUnitId}
+
+    </select>
+
 
 
 
