@@ -3,6 +3,7 @@ package com.leaderment.sales.mapper.mybatis;
 
 import com.leaderment.sales.pojo.SalePlan;
 import com.leaderment.sales.pojo.ItemKey;
+import com.leaderment.sales.pojo.User;
 import com.leaderment.sales.pojo.dto.FindSalesPalnListDTO;
 import com.leaderment.sales.pojo.vo.ItemValVO;
 import com.leaderment.sales.pojo.vo.SalePlanItemListVO;
@@ -13,13 +14,7 @@ import java.util.List;
 
 public interface SalePalnMapperEx {
 
-    List<SalePlan> findAll();
 
-    List<ItemKey> findItemTableHead();
-
-    List<SalePlanVO> findSalePlanLit();
-
-    List<ItemValVO> findSalePlanItemLit(int salePlanItemId);
 
     int isExistSalePalnItem(int salePlanId);
 
@@ -34,4 +29,10 @@ public interface SalePalnMapperEx {
     int isExistSalePaln(@Param("userId") int userId, @Param("time") String format);
 
     List<SalePlanItemListVO> findSalePlanItemListByBusinessUnitId(FindSalesPalnListDTO findSalesPalnListDTO);
+
+    List<User> findUserListByBusinessUnitIdAndStatus(@Param("businessUnitId") int businessUnitId, @Param("status") int status);
+
+    int findCountryIdByCountryName(String countryName);
+
+    int findProductIdByModelNumber(String productModelNumber);
 }

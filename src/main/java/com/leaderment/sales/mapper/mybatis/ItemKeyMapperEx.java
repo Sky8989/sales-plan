@@ -21,4 +21,6 @@ public interface ItemKeyMapperEx {
     int updateStatusByItemKeyId(@Param("status") int status, @Param("itemKeyId")int itemKeyId);
 
     int updateItemKeyAndTypeByItemId(ItemKey itemKey);
+
+    List<ItemKey> findByUserIdAndType(@Param("userId")Integer userId,@Param("type")int type,@Param("status") int status);
 }

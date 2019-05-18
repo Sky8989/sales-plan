@@ -145,16 +145,16 @@
             and sp.sale_plan_id = #{salePlanId}
 
             <if test="countryIdList != null and countryIdList.size() > 0">
-                and spi.country_id in
+                and spi.country in
                 <foreach collection="countryIdList" item="countryId" index="index" open="(" close=")" separator=",">
-                    　　　　　　      #{countryId}
-                    　　　　 </foreach>
+                #{countryId}
+                </foreach>
             </if>
             <if test="productIdList != null and productIdList.size() > 0">
                 and spi.product_id in
                 <foreach collection="productIdList" item="productId" index="index" open="(" close=")" separator=",">
-                    　　　　　　      #{productId}
-                    　　　　 </foreach>
+                #{productId}
+               </foreach>
             </if>
 
             <if test="status != 0 and status != null">
@@ -255,7 +255,7 @@
             u.user_name as userName
             FROM
             bison.sale_plan sp,
-            bison.sale_plan_item spi ,
+            bison.sale_plan_item spi,
             bison_amz_product_inventory.user_product_amz_asin_rel rel,
             bison.user u
             where
@@ -265,32 +265,60 @@
             and spi.user_id = u.user_id
             and u.business_unit_id = #{businessUnitId}
 
+           <if test="startPalnDate != null and startPalnDate != '' and  endPalnDate != null and endPalnDate != '' ">
+               AND  #{startPalnDate} <![CDATA[<=]]>  DATE_FORMAT(sp.plan_date,"%Y-%m")
+               AND  DATE_FORMAT(sp.plan_date,"%Y-%m") <![CDATA[<=]]>  #{endPalnDate}
+
+           </if>
+
+
+
         <if test="countryIdList != null and countryIdList.size() > 0">
-            and spi.country_id in
+            and spi.country in
             <foreach collection="countryIdList" item="countryId" index="index" open="(" close=")" separator=",">
-                　　　　　　      #{countryId}
-                　　　　 </foreach>
+            #{countryId}
+            </foreach>
         </if>
         <if test="productIdList != null and productIdList.size() > 0">
             and spi.product_id in
             <foreach collection="productIdList" item="productId" index="index" open="(" close=")" separator=",">
-                　　　　　　      #{productId}
-                　　　　 </foreach>
+            #{productId}
+            </foreach>
         </if>
 
         <if test="status != 0 and status != null">
             and spi.status = #{status}
         </if>
-
             group by spi.sale_plan_item_id,spi.country,spi.product_id,rel.asin_id
 
        ) t1
-
         left join  bison.product p on t1.productId =  p.product_id
         left join  bison.country c on t1.countryId =  c.country_id
         left join  bison_amz_product_inventory.amz_asin a on t1.asinId = a.asin_id
 
 
+    </select>
+
+    <select id="findUserListByBusinessUnitIdAndStatus" resultType="com.leaderment.sales.pojo.User">
+
+     SELECT
+        u.user_id as userId,
+        u.user_name as userName
+    FROM
+        bison.sale_plan sp,
+        bison.user u
+    where
+        sp.user_id = u.user_id
+        and u.business_unit_id = #{businessUnitId}
+        and sp.status = #{status}
+    </select>
+
+    <select id="findCountryIdByCountryName" resultType="java.lang.Integer">
+        SELECT country_id from bison.country where country_name = #{countryName}
+    </select>
+
+    <select id="findProductIdByModelNumber" resultType="java.lang.Integer">
+      SELECT product_id from bison.product where product_model_number = #{productModelNumber}
     </select>
 
 

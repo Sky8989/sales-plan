@@ -25,9 +25,10 @@ public class SalePlanItemListVO {
     private int userId;
 
 
+
     private int  asinId;
 
-    private int status;
+
 
     private int productId;
 
@@ -42,7 +43,7 @@ public class SalePlanItemListVO {
     private  int salesVolumeRuleId;
 
 
-
+    private String userName;
 
     private String  countryName;
 
@@ -72,8 +73,19 @@ public class SalePlanItemListVO {
      */
     private int rationality;
 
+
+    private int status;
+
     private String remark;
 
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public int getSalesVolumeRuleId() {
         return salesVolumeRuleId;
@@ -168,8 +180,28 @@ public class SalePlanItemListVO {
         return rationality;
     }
 
+
     public void setRationality(int rationality) {
+        boolean flag = checkRationality(rationality);
+
+        if(flag){
+            rationality = 1;
+        }else{
+            rationality = -1;
+        }
         this.rationality = rationality;
+    }
+
+    /**
+     * 判断是否合理
+     * @param rationality
+     */
+    private boolean checkRationality(int rationality) {
+        if(this.rationality <= rationality){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     public int getStatus() {
@@ -224,6 +256,7 @@ public class SalePlanItemListVO {
                 ", countryId=" + countryId +
                 ", ItemValVOList=" + ItemValVOList +
                 ", salesVolumeRuleId=" + salesVolumeRuleId +
+                ", userName='" + userName + '\'' +
                 ", countryName='" + countryName + '\'' +
                 ", productModelNumber='" + productModelNumber + '\'' +
                 ", asin='" + asin + '\'' +

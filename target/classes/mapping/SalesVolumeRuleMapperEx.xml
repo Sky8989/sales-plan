@@ -30,7 +30,8 @@
     <select id="findByItemKeyIdAndSales"  resultType="com.leaderment.sales.pojo.SalesVolumeRule">
         SELECT
             sales_volume_rule_id	as salesVolumeRuleId,
-            item_key_id	        as itemKeyId
+            item_key_id	        as itemKeyId,
+            rationality
         FROM
             bison.sales_volume_rule
         where

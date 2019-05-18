@@ -91,6 +91,14 @@ public class SalesPalnSalesChargeViewHandler {
     }
 
 
+    @ApiOperation(value = " 通过主管id 查询bUId  查询在salePlanItem中存在的user列表 ")
+    @GetMapping("/findUserList/{userId}")
+    public ResultBean findUserList(@PathVariable int userId) {
+        System.out.println("======userId == " + userId);
+        ResultBean result =  salesPalnSalesChargeViewService.findUserList(userId);
+        return result;
+    }
+
 
 
 

@@ -14,8 +14,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-
+import java.io.IOException;
 
 
 /**
@@ -81,6 +82,24 @@ public class SalesPalnSalesViewHandler {
 
         ResultBean resultBean = itemKeyService.findAll(userId);
         return resultBean;
+    }
+
+
+    @ApiOperation(value = "上传销售计划 ")
+    @PostMapping("/uplaodSalePlanFile")
+    public ResultBean uplaodSalePlanFile(@RequestParam(value = "uplaodSalePlanFile")
+                                                     MultipartFile file,
+                                         @RequestParam("userId") Integer userId,
+                                         @RequestParam("salePlanId")Integer salePlanId) throws IOException {
+        System.out.println("=====uplaodSalePlanFile====== =");
+        System.out.println("=====file====== ="  + file);
+        System.out.println("=====salePlanId====== ="  + salePlanId);
+        System.out.println("=====userId====== ="  + userId);
+
+     //   ResultBean result = new ResultBean();
+        ResultBean result = salesPalnSalesViewService.uplaodSalePlanFile(file,userId,salePlanId);
+
+        return result;
     }
 
 

@@ -10,8 +10,11 @@ public class FindSalesPalnListDTO {
     private List<Integer> countryIdList;
 
     /**
-     * 销售计划 提交人
+     * 销售计划 提交人 列表  主管视图参数
      */
+    private int userIdList;
+
+    //操作本人userId
     private int userId;
 
 

@@ -17,10 +17,14 @@ import javax.persistence.*;
 public class SalePlanItem {
     @Id
     @Column(name = "sale_plan_item_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int salePlanItemId;
 
     @Column(name = "sale_plan_id", nullable = false)
     private int salePlanId;
+
+    @Column(name = "product_id", nullable = false)
+    private int productId;
 
     @Column(name = "user_id", nullable = false)
     private int userId;
@@ -28,17 +32,17 @@ public class SalePlanItem {
     @Column(name = "country", nullable = false)
     private int country;
 
-    @Column(name = "last_units_avg_day", nullable = false)
+    @Transient
     private int lastUnitsAvgDay;
 
-    @Column(name = "est_units_avg_day", nullable = false)
+    @Transient
     private int estUnitsAvgDay;
 
     @Column(name = "est_units_promotion", nullable = false)
     private int estUnitsPromotion;
 
 
-    @Column(name = "rationality", nullable = false)
+    @Transient
     private int rationality;
 
 
@@ -46,9 +50,22 @@ public class SalePlanItem {
     @Column(name = "status", nullable = false)
     private int status;
 
-    @Column(name = "remark", nullable = false)
+    @Column(name = "remark")
     private String remark;
 
+    public SalePlanItem(){}
+    public SalePlanItem(int salePlanId, int userId) {
+        this.salePlanId = salePlanId;
+        this.userId = userId;
+    }
+
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
 
     public int getSalePlanItemId() {
         return salePlanItemId;
@@ -135,6 +152,7 @@ public class SalePlanItem {
         return "SalePlanItem{" +
                 "salePlanItemId=" + salePlanItemId +
                 ", salePlanId=" + salePlanId +
+                ", productId=" + productId +
                 ", userId=" + userId +
                 ", country=" + country +
                 ", lastUnitsAvgDay=" + lastUnitsAvgDay +

@@ -63,4 +63,21 @@
 
     </update>
 
+    <select id="findByUserIdAndType" resultType="com.leaderment.sales.pojo.ItemKey">
+         SELECT
+                ik.item_key_id 	as itemKeyId,
+                ik.item_key			as itemKey,
+                ik.type,
+                ik.`status`
+            FROM
+                bison.item_key ik,
+                bison.user u
+            where
+                 ik.business_unit_id = u.business_unit_id
+                and ik.type = #{type}
+                and u.user_id = #{userId}
+                and ik.status = #{status}
+
+    </select>
+
 </mapper>

@@ -19,6 +19,7 @@ import java.util.Date;
 public class SalePlan {
     @Id
     @Column(name = "sale_plan_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int salePlanId;
 
     @Column(name = "user_id", nullable = false)

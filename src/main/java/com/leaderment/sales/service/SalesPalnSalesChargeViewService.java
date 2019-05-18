@@ -26,4 +26,6 @@ public interface SalesPalnSalesChargeViewService {
     ResultBean getAll(int userId);
 
     ResultBean findSalePlanItemList(FindSalesPalnListDTO findSalesPalnListDTO);
+
+    ResultBean findUserList(int userId);
 }
