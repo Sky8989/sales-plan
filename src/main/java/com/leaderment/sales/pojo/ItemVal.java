@@ -15,7 +15,7 @@ public class ItemVal {
     @Column(name = "item_key_id", nullable = false)
     private int ItemKeyId;
 
-    @Column(name = "item_val", nullable = false)
+    @Column(name = "item_val")
     private String itemVal;
 
     @Column(name = "sale_plan_item_id", nullable = false)

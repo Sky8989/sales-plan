@@ -30,8 +30,8 @@ public class SalesOperationsViewHandler {
     @PostMapping("/findSalePlanItemList")
     public ResultBean findSalePlanItemList(@RequestBody FindSalesPalnListDTO findSalesPalnListDTO) {
         System.out.println("findSalesPalnListDTO = " + findSalesPalnListDTO);
-f
-        ResultBean result =  salesOperationsViewService.findSalePlanItemList(indSalesPalnListDTO);
+
+        ResultBean result =  salesOperationsViewService.findSalePlanItemList(findSalesPalnListDTO);
         return result;
     }
 

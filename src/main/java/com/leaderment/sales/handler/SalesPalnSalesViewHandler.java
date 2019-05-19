@@ -6,6 +6,7 @@ import com.leaderment.sales.mapper.mybatis.SalePalnMapperEx;
 import com.leaderment.sales.pojo.SalePlan;
 import com.leaderment.sales.pojo.dto.FindSalesPalnListDTO;
 
+import com.leaderment.sales.pojo.dto.UpdateSalePalnItemStatusDTO;
 import com.leaderment.sales.service.ItemKeyService;
 import com.leaderment.sales.service.SalesPalnSalesViewService;
 import com.leaderment.sales.util.entity.ResultBean;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -101,6 +104,30 @@ public class SalesPalnSalesViewHandler {
 
         return result;
     }
+
+    @ApiOperation(value = "修改销售计划 子项的状态 ")
+    @PutMapping("/updateStatusBySalePlanItemId/{salePlanItemId}/{status}")
+    public ResultBean updateStatusBySalePlanItemId(@PathVariable("salePlanItemId") int salePlanItemId,@PathVariable("status") int status){
+        System.out.println("=====salePlanItemId====== ="  + salePlanItemId);
+        System.out.println("=====status====== ="  + status);
+
+        ResultBean result = salesPalnSalesViewService.updateStatusBySalePlanItemId(salePlanItemId,status);
+
+        return result;
+    }
+
+    @ApiOperation(value = "通过 salePlanItemIdList 批量 修改状态 ")
+    @PostMapping("/batchUpdateStatusBySalePlanItemIdList")
+    public ResultBean batchUpdateStatusBySalePlanItemIdList(@RequestBody UpdateSalePalnItemStatusDTO updateSalePalnItemStatusDTO){
+        System.out.println("=====updateSalePalnItemStatusDTO====== ="  + updateSalePalnItemStatusDTO);
+
+
+        ResultBean result = salesPalnSalesViewService.batchUpdateStatusBySalePlanItemIdList(updateSalePalnItemStatusDTO);
+
+        return result;
+    }
+
+
 
 
 

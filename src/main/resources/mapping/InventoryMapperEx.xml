@@ -4,80 +4,97 @@
 <!--namespace可以写类的全限定名，这样做的好处是
 　　sqlSession.insert(Student.class.getName()+".addStudent");
 -->
-<mapper namespace="com.leaderment.sales.mapper.mybatis.ItemKeyMapperEx">
+<mapper namespace="com.leaderment.sales.mapper.mybatis.InventoryMapperEx">
+    
+    <select id="findStorageNumByProductId" resultType="java.lang.Integer">
+    SELECT
+        sum(FLOOR(r1.i_quantity) + FLOOR(r8.i_quantity))
+    FROM
+        U8.rdrecords01 r1,
+        U8.rdrecords08 r8,
+        bison.product p
+    where
+        r1.c_inv_code = p.product_u8_code
+        and p.product_u8_code  = r8.c_inv_code
+        and p.product_id = #{productId}
+        group by p.product_id
+    </select>
 
-    <select id="findAll" resultType="com.leaderment.sales.pojo.dto.ItemKeyDTO">
+    <select id="findStorageNumOutByProductId" resultType="java.lang.Integer">
+    SELECT
+        sum(FLOOR(r9.i_quantity)) as storageNumber9
+    FROM
+        U8.rdrecords01 r9,
+        bison.product p
+    where
+        r9.c_inv_code = p.product_u8_code
+        and p.product_id = #{productId}
+        group by p.product_id
+
+    </select>
+
+    <select id="findAfnFulfillableQuantityByAsinId" resultType="java.lang.Integer">
         SELECT
-            item_key_id		as itemKeyId,
-            item_key		as itemKey,
-            type,
-            status
+            sum(afn_fulfillable_quantity)
         FROM
-            bison.item_key
-
+            bison_amz_product_inventory.amz_inventory
+        where
+            asin_id = #{asinId};
     </select>
 
-    <select id="getByItemKeyAndTypeAndBusinessUnitId" resultType="java.lang.Integer" parameterType="com.leaderment.sales.pojo.ItemKey">
+    <select id="findShippedNumberByAsinId" resultType="java.lang.Integer">
         SELECT
-            COUNT(1)
+            sum(item.quantity_shipped - item.quantity_received) as shipped
         FROM
-            bison.item_key
-        WHERE
-            item_key = #{itemKey}
-            AND type = #{type}
-            AND business_unit_id = #{businessUnitId}
+            bison_amz_product_inventory.amz_shipment aship,
+            bison_amz_product_inventory.amz_shipment_item  item,
+            bison_amz_product_inventory.amz_seller_sku sku
 
+        where
+            aship.shipment_id = item.shipment_id
+            and item.seller_sku = sku.sku
+            and (aship.status_id = 2 or aship.status_id = 6)
+            and sku.asin_id = #{asinid}
+        group by sku.asin_id
     </select>
 
-    <select id="findByBusinessUnitId" resultType="com.leaderment.sales.pojo.ItemKey" >
+    <select id="findSupplierStorageNumByProductId" resultType="java.lang.Integer">
         SELECT
-            item_key_id		    as itemKeyId,
-            item_key		    as itemKey,
-            business_unit_id    as businessUnitId,
-            type,
-            status,
-            last_day_val        as lastDayVal
+            sum(floor(r8.i_quantity+r1.i_quantity))
         FROM
-            bison.item_key
-        WHERE
-            business_unit_id = #{businessUnitId}
+            U8.supplier s,
+            U8.rdrecords08 r8,
+            U8.rdrecords08 r1,
+            U8.ven_and_inv vai,
+            bison.product p
+        where
+             p.product_u8_code = vai.c_inv_code
+             and vai.c_ven_code = s.c_ven_code
+             and r8.c_inv_code = p.product_u8_code
+             and r1.c_inv_code = p.product_u8_code
+             and p.product_id = #{productId}
+
+        group by p.product_id
+    </select>
+
+    <select id="findSupplierStorageNumOutByProductId" resultType="java.lang.Integer">
+        SELECT
+            sum(floor(r9.i_quantity))
+        FROM
+            U8.supplier s,
+            U8.rdrecords09 r9,
+            U8.ven_and_inv vai,
+            bison.product p
+        where
+         r9.c_inv_code = vai.c_inv_code
+         and vai.c_ven_code = s.c_ven_code
+         and r9.c_inv_code = p.product_u8_code
+         and p.product_id = #{productId}
+         group by p.product_id
     </select>
 
 
-    <update id="updateStatusByItemKeyId"  >
-        UPDATE bison.item_key
-            SET
-            status = #{status}
-        WHERE
-        item_key_id = #{itemKeyId}
 
-    </update>
 
-    <update id="updateItemKeyAndTypeByItemId"  parameterType="com.leaderment.sales.pojo.ItemKey">
-        UPDATE bison.item_key
-            SET
-            item_key = #{itemKey},
-            type = #{type}
-        WHERE
-            item_key_id = #{itemKeyId}
-
-    </update>
-
-    <select id="findByUserIdAndType" resultType="com.leaderment.sales.pojo.ItemKey">
-         SELECT
-                ik.item_key_id 	as itemKeyId,
-                ik.item_key			as itemKey,
-                ik.type,
-                ik.`status`
-            FROM
-                bison.item_key ik,
-                bison.user u
-            where
-                 ik.business_unit_id = u.business_unit_id
-                and ik.type = #{type}
-                and u.user_id = #{userId}
-                and ik.status = #{status}
-
-    </select>
 
 </mapper>

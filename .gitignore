@@ -1,5 +1,3 @@
-.DS_Store
-node_modules/
 /dist/
 .svn/
 src/.svn/
@@ -11,6 +9,7 @@ yarn-error.log*
 selenium-debug.log
 .idea/
 target/
+target/classes
 
 # Editor directories and files
 .idea
@@ -19,6 +18,11 @@ target/
 *.ntvs*
 *.njsproj
 *.sln
+*.iml
+
+.idea/
+target/
+target/classes
 
 
 

@@ -4,6 +4,7 @@ import com.leaderment.sales.mapper.jpa.*;
 import com.leaderment.sales.mapper.mybatis.*;
 import com.leaderment.sales.pojo.*;
 import com.leaderment.sales.pojo.dto.FindSalesPalnListDTO;
+import com.leaderment.sales.pojo.dto.UpdateSalePalnItemStatusDTO;
 import com.leaderment.sales.pojo.vo.ItemValVO;
 import com.leaderment.sales.pojo.vo.SalePlanItemListVO;
 import com.leaderment.sales.service.SalesPalnSalesViewService;
@@ -433,7 +434,7 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
                 //初始化 为1
                 salePlanItem.setStatus(1);
                 salePlanItem.setRemark(strings[strings.length-1]);
-                salePlanItem.setRemark(strings[strings.length-3]);
+                salePlanItem.setEstUnitsPromotion(Integer.parseInt(strings[strings.length-3]));
                // salePlanItem.setCountry();
                 String countryName =  strings[0];
                 String productModelNumber =  strings[1];
@@ -488,6 +489,78 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
         return resultBean;
     }
 
+    @Override
+    public ResultBean updateStatusBySalePlanItemId(int salePlanItemId, int status) {
+        ResultBean resultBean = new ResultBean();
+
+        if(salePlanItemId == 0){
+            resultBean.setMsg("销售计划子项 id不能为空,修改失败!");
+            resultBean.setCode(500);
+            return resultBean;
+        }
+        if(status <= 0){
+            resultBean.setMsg("状态错误,修改失败!");
+            resultBean.setCode(500);
+            return resultBean;
+        }
+
+        int num = salePlanItemMapperEx.updateStatusBySalePlanItemId(salePlanItemId,status);
+        if(num > 0){
+            resultBean.setMsg("修改成功");
+        }else {
+            resultBean.setMsg("修改失败");
+            resultBean.setCode(500);
+        }
+
+
+
+        return resultBean;
+    }
+
+    @Override
+    public ResultBean batchUpdateStatusBySalePlanItemIdList(UpdateSalePalnItemStatusDTO updateSalePalnItemStatusDTO) {
+        ResultBean resultBean = new ResultBean();
+
+
+        if(updateSalePalnItemStatusDTO == null ){
+            resultBean.setCode(500);
+            resultBean.setMsg("上传数据为空!");
+            return resultBean;
+        }
+
+       List<Integer> salePlanItemIdList = updateSalePalnItemStatusDTO.getSalePlanItemIdList();
+       int status = updateSalePalnItemStatusDTO.getStatus();
+
+        if(salePlanItemIdList == null || salePlanItemIdList.size() == 0){
+            resultBean.setCode(500);
+            resultBean.setMsg("请先选中销售计划在进行提交!");
+            return resultBean;
+        }
+        if(status <=  0){
+            resultBean.setCode(500);
+            resultBean.setMsg("非法状态");
+            return resultBean;
+        }
+
+
+
+        long start = System.currentTimeMillis();
+        int num = 0;
+        for(Integer id : salePlanItemIdList){
+            num +=  salePlanItemMapperEx.updateStatusBySalePlanItemId(id,status);
+        }
+        long end = System.currentTimeMillis();
+        if(num > 0){
+            resultBean.setMsg("修改成功");
+        }else {
+            resultBean.setMsg("修改失败");
+            resultBean.setCode(500);
+        }
+
+        System.out.printf("总耗时: " + (end - start));
+
+        return resultBean;
+    }
 
 
     private ResultBean checkSalePlanItem(SalePlanItem salePlanItem) {

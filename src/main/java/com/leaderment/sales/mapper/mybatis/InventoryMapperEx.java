@@ -1,26 +1,25 @@
 package com.leaderment.sales.mapper.mybatis;
 
 
-import com.leaderment.sales.pojo.ItemKey;
+/**
+ * 库存相关 mapper
+ */
+public interface InventoryMapperEx {
 
-import com.leaderment.sales.pojo.dto.ItemKeyDTO;
-import org.apache.ibatis.annotations.Param;
+    //本地仓入库
+    Integer findStorageNumByProductId(int productId);
+    //本地仓出库
+    Integer findStorageNumOutByProductId(int productId);
 
-import java.util.List;
+    //amz 可卖
+    Integer findAfnFulfillableQuantityByAsinId(int asinId);
 
-public interface ItemKeyMapperEx {
+    //在途
+    Integer findShippedNumberByAsinId(int asinId);
 
 
-    List<ItemKeyDTO> findAll();
-
-
-    int getByItemKeyAndTypeAndBusinessUnitId(ItemKey itemKey);
-
-    List<ItemKey> findByBusinessUnitId(int businessUnitId);
-
-    int updateStatusByItemKeyId(@Param("status") int status, @Param("itemKeyId")int itemKeyId);
-
-    int updateItemKeyAndTypeByItemId(ItemKey itemKey);
-
-    List<ItemKey> findByUserIdAndType(@Param("userId")Integer userId,@Param("type")int type,@Param("status") int status);
+    //供应商 入库
+    Integer findSupplierStorageNumByProductId(int productId);
+    //供应商 出库
+    Integer findSupplierStorageNumOutByProductId(int productId);
 }

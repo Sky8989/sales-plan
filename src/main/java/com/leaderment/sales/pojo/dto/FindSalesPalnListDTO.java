@@ -12,7 +12,7 @@ public class FindSalesPalnListDTO {
     /**
      * 销售计划 提交人 列表  主管视图参数
      */
-    private int userIdList;
+    private List<Integer> userIdList;
 
     //操作本人userId
     private int userId;
@@ -41,6 +41,15 @@ public class FindSalesPalnListDTO {
      * 销售计划 item的状态
      */
     private Integer status;
+
+
+    public List<Integer> getUserIdList() {
+        return userIdList;
+    }
+
+    public void setUserIdList(List<Integer> userIdList) {
+        this.userIdList = userIdList;
+    }
 
     public int getBusinessUnitId() {
         return businessUnitId;
