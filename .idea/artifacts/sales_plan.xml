@@ -1,6 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="sales-plan">
-    <output-path>$PROJECT_DIR$/out/artifacts/sales_plan</output-path>
-    <root id="archive" name="sales-plan.jar" />
-  </artifact>
-</component>
