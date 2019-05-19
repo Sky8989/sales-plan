@@ -195,9 +195,8 @@ public class SalesOperationsViewServicelmpl implements SalesOperationsViewServic
         //出库
         Integer storageOutNum = inventoryMapperEx.findSupplierStorageNumOutByProductId(productId);
 
-        if(storageNum != null && storageOutNum != null){
-            resultNum = storageNum - storageOutNum;
-        }
+        resultNum = (storageNum == null ? 0 : storageNum) - (storageOutNum == null ? 0 : storageOutNum);
+
         return resultNum;
     }
 
@@ -216,9 +215,7 @@ public class SalesOperationsViewServicelmpl implements SalesOperationsViewServic
         Integer storageOutNum = inventoryMapperEx.findStorageNumOutByProductId(productId);
         logger.info("u8发出 storageOutNum  == " + storageOutNum);
 
-        if(storageNum != null && storageOutNum != null){
-            resultNum = storageNum - storageOutNum;
-        }
+        resultNum = (storageNum == null ? 0 : storageNum) - (storageOutNum == null ? 0 : storageOutNum);
 
 
 
@@ -241,9 +238,9 @@ public class SalesOperationsViewServicelmpl implements SalesOperationsViewServic
         Integer shippedNumber = inventoryMapperEx.findShippedNumberByAsinId(asinId);
         logger.info("在途 afnFulfillableQuantity  == " + shippedNumber);
 
-        if(afnFulfillableQuantity != null && shippedNumber != null){
-            resultNum = afnFulfillableQuantity + shippedNumber;
-        }
+
+            resultNum = (afnFulfillableQuantity == null ? 0 : afnFulfillableQuantity) + (shippedNumber == null ? 0 : shippedNumber);
+
 
         logger.info("亚马逊总数 resultNum  == " + resultNum);
         return resultNum;
