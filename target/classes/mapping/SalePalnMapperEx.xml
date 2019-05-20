@@ -4,7 +4,7 @@
 <!--namespace可以写类的全限定名，这样做的好处是
 　　sqlSession.insert(Student.class.getName()+".addStudent");
 -->
-<mapper namespace="com.leaderment.sales.mapper.mybatis.SalePalnMapperEx">
+<mapper namespace="com.leaderment.sales.mapper.mybatis.SalePlanMapperEx">
 
 
     <select id="findAll" resultType="com.leaderment.sales.pojo.SalePlan">
@@ -14,7 +14,7 @@
             plan_date	as planDate,
             status
         FROM
-            bison.sale_plan
+            bison_amz_product_inventory.sale_plan
     </select>
 
     <select id="findItemTableHead" resultType="com.leaderment.sales.pojo.ItemKey">
@@ -37,8 +37,8 @@
             spi.sale_plan_item_id as salePlanItemId
 
         FROM
-            bison.sale_plan  sp,
-            bison.sale_plan_item  spi
+            bison_amz_product_inventory.sale_plan  sp,
+            bison_amz_product_inventory.sale_plan_item  spi
         where
             sp.sale_plan_id = spi.sale_plan_id
 
@@ -50,75 +50,12 @@
         SELECT
             count(1)
         FROM
-            bison.sale_plan_item  spi,
-            bison.sale_plan sp
+            bison_amz_product_inventory.sale_plan_item  spi,
+            bison_amz_product_inventory.sale_plan sp
         where
             spi.sale_plan_id = sp.sale_plan_id
             and sp.sale_plan_id = #{salePlanId}
     </select>
-
-   <!-- <select id="findSalePlanItemList" parameterType="com.leaderment.sales.pojo.dto.FindSalesPalnListDTO" resultType="com.leaderment.sales.pojo.vo.SalePlanItemListVO">
-
-        SELECT
-            spi.sale_plan_item_id                           as salePlanItemId,
-            t1.country_name                                 as countryName,
-            t1.country_id                                   as countryId,
-            spi.product_id                                  as productId,
-            spi.last_units_avg_day                          as lastUnitsAvgDay,
-            spi.est_units_avg_day                           as estUnitsAvgDay,
-            spi.est_units_promotion                         as estUnitsPromotion,
-            spi.rationality,
-            spi.status,
-            spi.remark,
-            t1.asin,
-            t1.asin_id                                      as asinId,
-            p.product_model_number                          as productModelNumber
-        FROM
-            bison.sale_plan_item spi,
-            bison.sale_plan sp,
-            bison.product p,
-            (
-            select
-                a.asin,
-                a.asin_id,
-                upa_rel.product_id,
-                c.country_name,
-                c.country_id
-            from
-                bison_amz_product_inventory.user_product_amz_asin_rel upa_rel,
-                bison_amz_product_inventory.amz_asin a,
-                bison.country c
-            where
-                upa_rel.asin_id = a.asin_id
-                and c.country_id = upa_rel.country_id
-
-        <if test="countryIdList != null and countryIdList.size() > 0">
-            and c.country_id in
-            <foreach collection="countryIdList" item="countryId" index="index" open="(" close=")" separator=",">
-　　　　　　      #{countryId}
-    　　　　 </foreach>
-        </if>
-        <if test="productIdList != null and productIdList.size() > 0">
-            and upa_rel.product_id in
-            <foreach collection="productIdList" item="productId" index="index" open="(" close=")" separator=",">
-　　　　　　      #{productId}
-    　　　　 </foreach>
-        </if>
-            group by
-                upa_rel.asin_id,
-                upa_rel.product_id,
-                c.country_id
-            ) t1
-        where
-            spi.sale_plan_id = sp.sale_plan_id
-            and spi.product_id = p.product_id
-            and t1.product_id = p.product_id
-            and spi.country = t1.country_id
-        <if test="status != 0 and status != null">
-            and spi.status = #{status}
-        </if>
-            and sp.sale_plan_id = #{salePlanId}
-    </select>-->
 
     <select id="findSalePlanItemList" parameterType="com.leaderment.sales.pojo.dto.FindSalesPalnListDTO" resultType="com.leaderment.sales.pojo.vo.SalePlanItemListVO">
         select
@@ -134,8 +71,8 @@
             spi.status, spi.remark, spi.est_units_promotion as estUnitsPromotion,
             rel.asin_id as asinId
             FROM
-            bison.sale_plan sp,
-            bison.sale_plan_item spi ,
+            bison_amz_product_inventory.sale_plan sp,
+            bison_amz_product_inventory.sale_plan_item spi ,
             bison_amz_product_inventory.user_product_amz_asin_rel rel
             where
             spi.product_id = rel.product_id
@@ -181,9 +118,9 @@
             ik.last_day_val             as lastDayVal
 
         FROM
-            bison.sale_plan_item spi,
-            bison.item_key ik,
-            bison.item_val iv
+            bison_amz_product_inventory.sale_plan_item spi,
+            bison_amz_product_inventory.item_key ik,
+            bison_amz_product_inventory.item_val iv
         WHERE
             spi.sale_plan_item_id = iv.sale_plan_item_id
             AND iv.item_key_id = ik.item_key_id
@@ -216,7 +153,7 @@
 
         from
             bison.user u,
-            bison.item_key ik
+            bison_amz_product_inventory.item_key ik
 
         where
             u.business_unit_id = ik.business_unit_id
@@ -228,7 +165,7 @@
         SELECT
             count(1)
         FROM
-            bison.sale_plan
+            bison_amz_product_inventory.sale_plan
         WHERE
         user_id  = #{userId}
         AND plan_date like  concat('',#{time},'%')
@@ -254,8 +191,8 @@
             u.user_id as userId,
             u.user_name as userName
             FROM
-            bison.sale_plan sp,
-            bison.sale_plan_item spi,
+            bison_amz_product_inventory.sale_plan sp,
+            bison_amz_product_inventory.sale_plan_item spi,
             bison_amz_product_inventory.user_product_amz_asin_rel rel,
             bison.user u
             where
@@ -305,7 +242,7 @@
         u.user_id as userId,
         u.user_name as userName
     FROM
-        bison.sale_plan sp,
+        bison_amz_product_inventory.sale_plan sp,
         bison.user u
     where
         sp.user_id = u.user_id
@@ -320,6 +257,37 @@
     <select id="findProductIdByModelNumber" resultType="java.lang.Integer">
       SELECT product_id from bison.product where product_model_number = #{productModelNumber}
     </select>
+
+    <select id="findByUserId" resultType="com.leaderment.sales.pojo.SalePlan">
+         SELECT
+            sale_plan_id as salePlanId,
+            user_id		as userId,
+            plan_date	as planDate,
+            status
+        FROM
+            bison_amz_product_inventory.sale_plan
+        where
+            user_id = #{userId}
+
+    </select>
+
+    <insert id="save" keyProperty="salePlanId" useGeneratedKeys="true" parameterType="com.leaderment.sales.pojo.SalePlan">
+        insert into bison_amz_product_inventory.sale_plan
+        (user_id,plan_date,status)
+        values (#{userId},#{planDate},#{status})
+    </insert>
+
+    <select id="findBySalePlanItemId"  resultType="com.leaderment.sales.pojo.SalePlan">
+    SELECT
+        sale_plan_id as salePlanId,
+        user_id		as userId,
+        plan_date	as planDate,
+        status
+    FROM
+        bison_amz_product_inventory.sale_plan
+    where
+        sale_plan_id = #{salePlanId}
+ </select>
 
 
 

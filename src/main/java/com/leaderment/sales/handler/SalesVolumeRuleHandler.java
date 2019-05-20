@@ -1,12 +1,9 @@
 package com.leaderment.sales.handler;
 
 
-import com.leaderment.sales.mapper.jpa.SalePlanMapper;
-import com.leaderment.sales.mapper.mybatis.SalePalnMapperEx;
-import com.leaderment.sales.pojo.ItemKey;
+import com.leaderment.sales.mapper.mybatis.SalePlanMapperEx;
 import com.leaderment.sales.pojo.SalesVolumeRule;
 import com.leaderment.sales.service.ItemKeyService;
-import com.leaderment.sales.service.SalesPalnSalesViewService;
 import com.leaderment.sales.service.SalesVolumeRuleService;
 import com.leaderment.sales.util.entity.ResultBean;
 import io.swagger.annotations.Api;
@@ -32,11 +29,8 @@ public class SalesVolumeRuleHandler {
     @Autowired
     SalesVolumeRuleService salesVolumeRuleService;
 
-
     @Autowired
-    SalePlanMapper salePlanMapper;
-    @Autowired
-    SalePalnMapperEx salePalnMapperEx;
+    SalePlanMapperEx salePlanMapperEx;
 
     @ApiOperation(value = "添加销量规则")
     @PostMapping("/addSalesVolumeRule")

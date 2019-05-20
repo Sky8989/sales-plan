@@ -2,6 +2,8 @@ package com.leaderment.sales.handler;
 
 
 
+import com.leaderment.sales.pojo.dto.AddRemarkDTO;
+import com.leaderment.sales.pojo.dto.AddTotalSafetyDayDTO;
 import com.leaderment.sales.pojo.dto.FindSalesPalnListDTO;
 import com.leaderment.sales.pojo.vo.SalePlanItemListByOperationsVO;
 import com.leaderment.sales.service.SalesOperationsViewService;
@@ -10,6 +12,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 
 
 /**
@@ -34,6 +39,26 @@ public class SalesOperationsViewHandler {
         ResultBean result =  salesOperationsViewService.findSalePlanItemList(findSalesPalnListDTO);
         return result;
     }
+
+
+    @ApiOperation(value = "添加安全天数")
+    @PostMapping("/addTotalSafetyDay")
+    public ResultBean addTotalSafetyDay(@RequestBody AddTotalSafetyDayDTO addTotalSafetyDayDTO) {
+        System.out.println("addTotalSafetyDayDTO = " + addTotalSafetyDayDTO);
+
+        ResultBean result =  salesOperationsViewService.addTotalSafetyDay(addTotalSafetyDayDTO);
+        return result;
+    }
+
+    @ApiOperation(value = "添加备注")
+    @PostMapping("/addRemark")
+    public ResultBean addRemark(@RequestBody AddRemarkDTO addRemarkDTO, HttpServletRequest request) throws UnsupportedEncodingException {
+        System.out.println("addRemarkDTO = " + addRemarkDTO);
+        ResultBean result =  salesOperationsViewService.addRemark(addRemarkDTO);
+        return result;
+    }
+
+
 
 
 

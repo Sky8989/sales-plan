@@ -11,7 +11,7 @@ import java.util.List;
 public interface ItemKeyMapperEx {
 
 
-    List<ItemKeyDTO> findAll();
+
 
 
     int getByItemKeyAndTypeAndBusinessUnitId(ItemKey itemKey);
@@ -23,4 +23,10 @@ public interface ItemKeyMapperEx {
     int updateItemKeyAndTypeByItemId(ItemKey itemKey);
 
     List<ItemKey> findByUserIdAndType(@Param("userId")Integer userId,@Param("type")int type,@Param("status") int status);
+
+    List<ItemKey> getByBusinessUnitIdAndStatus(@Param("businessUnitId")int businessUnitId, @Param("status")int status);
+
+    int save(ItemKey itemKey);
+
+    ItemKey findByItemKeyId(int itemKeyId);
 }

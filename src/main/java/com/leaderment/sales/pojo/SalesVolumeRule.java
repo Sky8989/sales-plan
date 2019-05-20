@@ -11,37 +11,33 @@ import javax.persistence.*;
  * @Version 1.0
  **/
 
-@Entity
-@Table(name = "sales_volume_rule", schema = "bison")
 public class SalesVolumeRule {
 
 
-    @Id
-    @Column(name = "sales_volume_rule_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private int salesVolumeRuleId;
 
     /**
      * 参考当前 历史日均的值 计算
      */
 
-    @Column(name = "item_key_id", nullable = false)
+
     private int itemKeyId;
 
     /**
      * 销量范围最小值
      */
-    @Column(name = "min_sales_volume", nullable = false)
+
     private int minSalesVolume;
     /**
      * 销量范围最大值
      */
-    @Column(name = "max_sales_volume", nullable = false)
+
     private int maxSalesVolume;
     /**
      * 合理性
      */
-    @Column(name = "rationality", nullable = false)
+
     private int rationality;
 
 

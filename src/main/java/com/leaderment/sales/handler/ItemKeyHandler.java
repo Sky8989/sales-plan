@@ -1,11 +1,8 @@
 package com.leaderment.sales.handler;
 
 
-import com.leaderment.sales.mapper.jpa.SalePlanMapper;
-import com.leaderment.sales.mapper.mybatis.SalePalnMapperEx;
+import com.leaderment.sales.mapper.mybatis.SalePlanMapperEx;
 import com.leaderment.sales.pojo.ItemKey;
-import com.leaderment.sales.pojo.SalePlan;
-import com.leaderment.sales.pojo.dto.FindSalesPalnListDTO;
 import com.leaderment.sales.service.ItemKeyService;
 import com.leaderment.sales.service.SalesPalnSalesViewService;
 import com.leaderment.sales.util.entity.ResultBean;
@@ -31,10 +28,9 @@ public class ItemKeyHandler {
 
     @Autowired
     ItemKeyService itemKeyService;
+
     @Autowired
-    SalePlanMapper salePlanMapper;
-    @Autowired
-    SalePalnMapperEx salePalnMapperEx;
+    SalePlanMapperEx salePlanMapperEx;
 
     @ApiOperation(value = "添加自定义列")
     @PostMapping("/addItemKey")

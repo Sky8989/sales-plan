@@ -11,19 +11,17 @@ import java.util.Objects;
  * @Date 19-4-29 上午11:49
  * @Version 1.0
  **/
-@Entity
-@Table(name = "sales_volume_rule_item_key_rel", schema = "bison")
+
 public class SalesVolumeRuleItemKeyRel {
 
-    @Id
-    @Column(name = "sales_volume_rule_id", nullable = false)
+
     private int salesVolumeRuleId;
 
     /**
      * 参考当前 历史日均的值 计算
      */
 
-    @Column(name = "item_key_id", nullable = false)
+
     private int itemKeyId;
 
 
@@ -31,7 +29,7 @@ public class SalesVolumeRuleItemKeyRel {
     /**
      * 比率
      */
-    @Column(name = "item_key_ratio", nullable = false)
+
     private double itemKeyRatio;
 
     public int getSalesVolumeRuleId() {

@@ -1,8 +1,7 @@
 package com.leaderment.sales.handler;
 
 
-import com.leaderment.sales.mapper.jpa.SalePlanMapper;
-import com.leaderment.sales.mapper.mybatis.SalePalnMapperEx;
+import com.leaderment.sales.mapper.mybatis.SalePlanMapperEx;
 import com.leaderment.sales.pojo.SalePlan;
 import com.leaderment.sales.pojo.dto.FindSalesPalnListDTO;
 
@@ -18,8 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+
 
 
 /**
@@ -38,10 +36,9 @@ public class SalesPalnSalesViewHandler {
 
     @Autowired
     ItemKeyService itemKeyService;
+
     @Autowired
-    SalePlanMapper salePlanMapper;
-    @Autowired
-    SalePalnMapperEx salePalnMapperEx;
+    SalePlanMapperEx salePlanMapperEx;
 
     @ApiOperation(value = "创建销售计划")
     @PostMapping("/addSalesPlan")

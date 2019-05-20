@@ -10,14 +10,14 @@ import com.leaderment.sales.pojo.vo.SalePlanItemListVO;
 import com.leaderment.sales.service.SalesPalnSalesViewService;
 import com.leaderment.sales.util.entity.ResultBean;
 import com.leaderment.sales.util.excel.ImportExcelUtil;
-import org.apache.poi.hssf.util.CellReference;
+
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.beans.Transient;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,32 +27,24 @@ import java.util.*;
 public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService {
 
 
-    @Autowired
-    SalePlanMapper salePlanMapper;
 
-    @Autowired
-    ItemValMapper itemValMapper;
-
-    @Autowired
-    SalePlanItemMapper salePlanItemMapper;
     @Autowired
     SalePlanItemMapperEx salePlanItemMapperEx;
 
     @Autowired
-    SalesVolumeRuleItemKeyRelMapper salesVolumeRuleItemKeyRelMapper;
-    @Autowired
     UserMapper userMapper;
 
     @Autowired
-    ItemKeyMapper itemKeyMapper;
-
-    @Autowired
     ItemKeyMapperEx itemKeyMapperEx;
+    @Autowired
+    ItemValMapperEx itemValMapperEx;
 
     @Autowired
-    SalePalnMapperEx salePalnMapperEx;
+    SalePlanMapperEx salePlanMapperEx;
+
     @Autowired
     SalesVolumeRuleMapperEx salesVolumeMapperEx;
+
     @Autowired
     SalesVolumeRuleItemKeyRelMapperEx salesVolumeRuleItemKeyRelMapperEx;
 
@@ -73,7 +65,7 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
             return resultBean;
         }
 
-        List<SalePlan> salePlanList = salePlanMapper.findByUserId(userId);
+        List<SalePlan> salePlanList = salePlanMapperEx.findByUserId(userId);
 
         DateFormat  df2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
@@ -95,18 +87,18 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
 
            if(salePlanId != 0){
                //1:查询当前salePlanId下的item是否存在
-               int flagNum = salePalnMapperEx.isExistSalePalnItem(salePlanId);
+               int flagNum = salePlanMapperEx.isExistSalePalnItem(salePlanId);
                if(flagNum > 0){
                    //1.1存在直接进行查询
                    System.out.println("findSalesPalnListDTO ========== "  + findSalesPalnListDTO);
-                   List<SalePlanItemListVO> salePlanItemListVOList  = salePalnMapperEx.findSalePlanItemList(findSalesPalnListDTO);
+                   List<SalePlanItemListVO> salePlanItemListVOList  = salePlanMapperEx.findSalePlanItemList(findSalesPalnListDTO);
                    System.out.println("salePlanItemListVOList ========== "  + salePlanItemListVOList);
 
                    //第一次 存参考库存
                 for(SalePlanItemListVO salePlanItem : salePlanItemListVOList){
                        int salePlanItemId = salePlanItem.getSalePlanItemId();
                        //自定义的列 和对应值
-                       List<ItemValVO>  itemValVOList =  salePalnMapperEx.findItemValBySalePlanItemId(salePlanItemId);
+                       List<ItemValVO>  itemValVOList =  salePlanMapperEx.findItemValBySalePlanItemId(salePlanItemId);
                        System.out.println("itemValVOList === " + itemValVOList);
 
 
@@ -118,7 +110,7 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
                                int lastDayVal = itemValVO.getLastDayVal();
                                //计算历史销量
                                System.out.println("-------------==计算历史销量");
-                               Integer lastUnitsOrderSum = salePalnMapperEx.getlastUnitsOrderedSum(lastDayVal,salePlanItem.getAsinId(),salePlanItem.getCountryId());
+                               Integer lastUnitsOrderSum = salePlanMapperEx.getlastUnitsOrderedSum(lastDayVal,salePlanItem.getAsinId(),salePlanItem.getCountryId());
                                lastUnitsOrderSum = lastUnitsOrderSum == null ? 0 : lastUnitsOrderSum;
                                System.out.println("历史销量 ==" + lastUnitsOrderSum);
                                itemValVO.setItemVal(lastUnitsOrderSum.toString());
@@ -202,7 +194,7 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
                     //计算历史销量 并通过对应规则id 拿到对应比率
                    for (SalePlanItemListVO salePlanItem: salePlanItemList){
 
-                       List<ItemValVO>  itemValVOList =  salePalnMapperEx.findItemValByUserId(userId);
+                       List<ItemValVO>  itemValVOList =  salePlanMapperEx.findItemValByUserId(userId);
                         //1:计算历史销量
                        for(ItemValVO  itemValVO : itemValVOList){
                            //历史销量
@@ -211,7 +203,7 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
                                int lastDayVal = itemValVO.getLastDayVal();
                                //计算历史销量
                                System.out.println("-------------==计算历史销量");
-                               Integer lastUnitsOrderSum = salePalnMapperEx.getlastUnitsOrderedSum(lastDayVal,salePlanItem.getAsinId(),salePlanItem.getCountryId());
+                               Integer lastUnitsOrderSum = salePlanMapperEx.getlastUnitsOrderedSum(lastDayVal,salePlanItem.getAsinId(),salePlanItem.getCountryId());
                                lastUnitsOrderSum = lastUnitsOrderSum == null ? 0 : lastUnitsOrderSum;
                                System.out.println("历史销量 ==" + lastUnitsOrderSum);
                                itemValVO.setItemVal(lastUnitsOrderSum.toString());
@@ -301,7 +293,7 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
         DateFormat  df = new SimpleDateFormat("yyyy-MM");
 
         String time  = df.format(salePlan.getPlanDate());
-        Integer num = salePalnMapperEx.isExistSalePaln(salePlan.getUserId(),time);
+        Integer num = salePlanMapperEx.isExistSalePaln(salePlan.getUserId(),time);
 
         if(num != null && num > 0){
             resultBean.setMsg("新增失败, " + df.format(salePlan.getPlanDate()) + "月已存在销售计划,请勿重复添加!!!");
@@ -311,7 +303,8 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
 
         salePlan.setStatus("1");
         //新增销售计划
-        SalePlan  resultSalePlan = salePlanMapper.save(salePlan);
+        salePlanMapperEx.save(salePlan);
+        SalePlan  resultSalePlan =salePlanMapperEx.findBySalePlanItemId(salePlan.getSalePlanId());
         if(resultSalePlan != null){
             resultBean = findSalesPlanByUserId(resultSalePlan.getUserId());
             resultBean.setMsg("新增销售计划成功");
@@ -361,11 +354,6 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
             System.out.println("numberOfSheets = " + numberOfSheets);
 
 
-            int estUnitsPromotionIndex = 0;
-            int remarkIndex = 0;
-            int countryNameIndex = 0;
-            int productModelNumberIndex = 0;
-
             //预测itemKey的索引 key:itemKey value index
             Map<String,Integer> map = new HashMap<>(itemKeyList.size());
 
@@ -402,21 +390,6 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
                            }
                            }
                        }
-                        //获取索引
-                        switch (cellName){
-                            case"productModelNumber":   //国家名
-                                productModelNumberIndex = j;
-                                break;
-                            case"countryName":   //国家名
-                                countryNameIndex = j;
-                                    break;
-                            case"estUnitsPromotion":   //预测活动量
-                                estUnitsPromotionIndex = j;
-                                    break;
-                            case"remark":   //备注
-                                remarkIndex = j;
-                            break;
-                        }
                     }
                 }
             }
@@ -438,8 +411,8 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
                // salePlanItem.setCountry();
                 String countryName =  strings[0];
                 String productModelNumber =  strings[1];
-                int countryId = salePalnMapperEx.findCountryIdByCountryName(countryName);
-                int productId = salePalnMapperEx.findProductIdByModelNumber(productModelNumber);
+                int countryId = salePlanMapperEx.findCountryIdByCountryName(countryName);
+                int productId = salePlanMapperEx.findProductIdByModelNumber(productModelNumber);
                 salePlanItem.setCountry(countryId);
                 salePlanItem.setProductId(productId);
 
@@ -451,7 +424,9 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
                 }
 
                 //保存到数据库
-                 salePlanItemMapper.save(salePlanItem);
+                salePlanItemMapperEx.save(salePlanItem);
+                int salePlanItemId = salePlanItem.getSalePlanItemId();
+                salePlanItem.setSalePlanItemId(salePlanItemId);
                 System.out.println("salePlanItem = " + salePlanItem);
 
 
@@ -467,7 +442,7 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
                         itemVal.setSalePlanItemId(salePlanItem.getSalePlanItemId());
                         itemVal.setItemVal(itemValName);
 
-                        itemValMapper.save(itemVal);
+                        itemValMapperEx.save(itemVal);
 
                     }
                 }
@@ -478,7 +453,8 @@ public class SalesPalnSalesViewServiceImpl implements SalesPalnSalesViewService 
                     int itemKeyId = itemKey.getItemKeyId();
                     itemVal.setItemKeyId(itemKeyId);
                     itemVal.setSalePlanItemId(salePlanItem.getSalePlanItemId());
-                    itemValMapper.save(itemVal);
+                    itemValMapperEx.save(itemVal);
+                    itemVal.setItemValId(itemVal.getItemValId());
                 }
 
             }

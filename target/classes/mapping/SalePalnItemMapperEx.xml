@@ -7,7 +7,7 @@
 <mapper namespace="com.leaderment.sales.mapper.mybatis.SalePlanItemMapperEx">
 
     <select id="findNumBySalePlanId"  resultType="java.lang.Integer">
-      SELECT count(1) from bison.sale_plan_item where sale_plan_id = #{salePlanId}
+      SELECT count(1) from bison_amz_product_inventory.sale_plan_item where sale_plan_id = #{salePlanId}
     </select>
 
     <select id="findSalePlanItemListByOperationsVOByBusinessUnitId" parameterType="com.leaderment.sales.pojo.dto.FindSalesPalnListDTO" resultType="com.leaderment.sales.pojo.vo.SalePlanItemListByOperationsVO">
@@ -29,8 +29,8 @@
                 u.user_name as userName,
                 up.total_safety_day as totalSafetyDay
             FROM
-                bison.sale_plan sp,
-                bison.sale_plan_item spi,
+                bison_amz_product_inventory.sale_plan sp,
+                bison_amz_product_inventory.sale_plan_item spi,
                 bison_amz_product_inventory.user_product_amz_asin_rel rel,
                 bison.user u,
                 bison_amz_product_inventory.user_products up
@@ -67,10 +67,41 @@
     </select>
 
     <update id="updateStatusBySalePlanItemId" >
-        update  bison.sale_plan_item set status = #{status} where sale_plan_item_id = #{salePlanItemId};
+        update  bison_amz_product_inventory.sale_plan_item set status = #{status} where sale_plan_item_id = #{salePlanItemId};
     </update>
 
+    <update id="addTotalSafetyDayBySalePlanItemId" parameterType="com.leaderment.sales.pojo.dto.AddTotalSafetyDayDTO">
+    update
+        bison_amz_product_inventory.user_products
+            set total_safety_day = #{totalSafetyDay}
+            where product_id  = (SELECT product_id FROM bison_amz_product_inventory.sale_plan_item where sale_plan_item_id = #{salePlanItemId})
+    </update>
 
+   <select id="findBySalePlanItemId" resultType="com.leaderment.sales.pojo.SalePlanItem">
+
+       SELECT
+                spi.sale_plan_item_id as salePlanItemId,
+                spi.sale_plan_id as salePlanId,
+                spi.country,
+                spi.product_id as productId,
+                spi.status,
+                spi.remark,
+
+                spi.est_units_promotion as estUnitsPromotion
+
+            FROM
+                bison_amz_product_inventory.sale_plan_item spi
+            where
+                spi.sale_plan_item_id = #{salePlanItemId}
+   </select>
+
+    <insert id="save"  useGeneratedKeys="true" keyProperty="salePlanItemId" parameterType="com.leaderment.sales.pojo.SalePlanItem" >
+        insert into bison_amz_product_inventory.sale_plan_item
+        (sale_plan_id, country, product_id, user_id, status, remark, est_units_promotion)
+        values
+        (#{salePlanId},#{country},#{productId},#{userId},#{status},#{remark},#{estUnitsPromotion})
+
+    </insert>
 
 
 

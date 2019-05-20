@@ -3,28 +3,25 @@ package com.leaderment.sales.pojo;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "item_key", schema = "bison")
+
 public class ItemKey {
 
-    @Id
-    @Column(name = "item_key_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private int itemKeyId;
 
-    @Column(name = "item_key", nullable = false)
+
     private String itemKey;
 
-    @Column(name = "type", nullable = false)
+
     private int type;
 
-    @Column(name = "status", nullable = false)
+
     private int status;
 
-    @Column(name = "business_unit_id", nullable = false)
+
     private int businessUnitId;
 
-    @Column(name = "last_day_val")
+
     private Integer lastDayVal;
 
     @Transient

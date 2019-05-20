@@ -14,21 +14,17 @@ import java.util.Date;
  * @Date 19-4-26 下午4:03
  * @Version 1.0
  **/
-@Entity
-@Table(name = "sale_plan", schema = "bison")
+
 public class SalePlan {
-    @Id
-    @Column(name = "sale_plan_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private int salePlanId;
 
-    @Column(name = "user_id", nullable = false)
+
     private int userId;
 
-    @Column(name = "plan_date", nullable = false)
+
     @DateTimeFormat(pattern = "yyyy-MM") //前端入参
     private Date planDate;
-//    private String planDate;
 
     @Column(name = "status", nullable = false)
     private String status;

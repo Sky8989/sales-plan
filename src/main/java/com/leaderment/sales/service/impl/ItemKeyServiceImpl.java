@@ -1,7 +1,5 @@
 package com.leaderment.sales.service.impl;
 
-import com.leaderment.sales.mapper.jpa.ItemKeyMapper;
-import com.leaderment.sales.mapper.jpa.SalesVolumeRuleMapper;
 import com.leaderment.sales.mapper.jpa.UserMapper;
 import com.leaderment.sales.mapper.mybatis.ItemKeyMapperEx;
 import com.leaderment.sales.mapper.mybatis.SalesVolumeRuleItemKeyRelMapperEx;
@@ -10,7 +8,6 @@ import com.leaderment.sales.pojo.ItemKey;
 import com.leaderment.sales.pojo.SalesVolumeRule;
 import com.leaderment.sales.pojo.SalesVolumeRuleItemKeyRel;
 import com.leaderment.sales.pojo.User;
-import com.leaderment.sales.pojo.dto.ItemKeyDTO;
 import com.leaderment.sales.pojo.vo.ShowItemKeyAndSalesVolumeRuleAllVO;
 import com.leaderment.sales.pojo.vo.ShowItemKeyVO;
 import com.leaderment.sales.service.ItemKeyService;
@@ -26,8 +23,7 @@ import java.util.List;
 @Service
 public class ItemKeyServiceImpl implements ItemKeyService {
 
-    @Autowired
-    ItemKeyMapper itemKeyMapper;
+
 
     @Autowired
     UserMapper userMapper;
@@ -59,7 +55,7 @@ public class ItemKeyServiceImpl implements ItemKeyService {
         /**
          * 没有被禁用 itemKey
          */
-        List<ItemKey> itemKeyList =   itemKeyMapper.getByBusinessUnitIdAndStatus(user.getBusinessUnitId(),1);
+        List<ItemKey> itemKeyList =   itemKeyMapperEx.getByBusinessUnitIdAndStatus(user.getBusinessUnitId(),1);
 
         if(itemKeyList != null){
             resultBean.setData(itemKeyList);
@@ -100,7 +96,9 @@ public class ItemKeyServiceImpl implements ItemKeyService {
             //新增
             itemKey.setStatus(1);
             itemKey.setLastDayVal(Integer.parseInt(itemKey.getItemKey()));
-             itemKeyMapper.save(itemKey);
+            itemKeyMapperEx.save(itemKey);
+            itemKey.setItemKeyId(itemKey.getItemKeyId());
+            System.out.printf("新增== itemKey = " + itemKey);
             if(itemKey.getItemKeyId() > 0){
                 //查询当前部门下的所有itemKey
                List<ItemKey> itemKeyList = itemKeyMapperEx.findByBusinessUnitId(itemKey.getBusinessUnitId());
@@ -213,7 +211,7 @@ public class ItemKeyServiceImpl implements ItemKeyService {
             return resultBean;
         }
 
-        ItemKey itemKey = itemKeyMapper.findOne(itemKeyId);
+        ItemKey itemKey = itemKeyMapperEx.findByItemKeyId(itemKeyId);
         if(itemKey == null){
             resultBean.setMsg("不存在当前自定义列,禁用失败");
             resultBean.setCode(500);

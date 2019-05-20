@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -28,7 +29,7 @@ public class SalePlanItemListVO {
 
     private int  asinId;
 
-
+    private List<String> showRemark;
 
     private int productId;
 
@@ -78,6 +79,14 @@ public class SalePlanItemListVO {
 
     private String remark;
 
+
+    public List<String> getShowRemark() {
+        return showRemark;
+    }
+
+    public void setShowRemark(List<String> showRemark) {
+        this.showRemark = showRemark;
+    }
 
     public String getUserName() {
         return userName;
@@ -217,7 +226,10 @@ public class SalePlanItemListVO {
     }
 
     public void setRemark(String remark) {
+
         this.remark = remark;
+
+        this.showRemark = Arrays.asList(remark.split("\n"));
     }
 
     public int getProductId() {
@@ -251,7 +263,7 @@ public class SalePlanItemListVO {
                 ", salePlanId=" + salePlanId +
                 ", userId=" + userId +
                 ", asinId=" + asinId +
-                ", status=" + status +
+                ", showRemark=" + showRemark +
                 ", productId=" + productId +
                 ", countryId=" + countryId +
                 ", ItemValVOList=" + ItemValVOList +
@@ -264,6 +276,7 @@ public class SalePlanItemListVO {
                 ", estUnitsAvgDay=" + estUnitsAvgDay +
                 ", estUnitsPromotion=" + estUnitsPromotion +
                 ", rationality=" + rationality +
+                ", status=" + status +
                 ", remark='" + remark + '\'' +
                 '}';
     }

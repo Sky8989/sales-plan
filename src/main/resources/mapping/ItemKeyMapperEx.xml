@@ -13,7 +13,7 @@
             type,
             status
         FROM
-            bison.item_key
+            bison_amz_product_inventory.item_key
 
     </select>
 
@@ -21,7 +21,7 @@
         SELECT
             COUNT(1)
         FROM
-            bison.item_key
+            bison_amz_product_inventory.item_key
         WHERE
             item_key = #{itemKey}
             AND type = #{type}
@@ -38,14 +38,14 @@
             status,
             last_day_val        as lastDayVal
         FROM
-            bison.item_key
+            bison_amz_product_inventory.item_key
         WHERE
             business_unit_id = #{businessUnitId}
     </select>
 
 
     <update id="updateStatusByItemKeyId"  >
-        UPDATE bison.item_key
+        UPDATE bison_amz_product_inventory.item_key
             SET
             status = #{status}
         WHERE
@@ -54,7 +54,7 @@
     </update>
 
     <update id="updateItemKeyAndTypeByItemId"  parameterType="com.leaderment.sales.pojo.ItemKey">
-        UPDATE bison.item_key
+        UPDATE bison_amz_product_inventory.item_key
             SET
             item_key = #{itemKey},
             type = #{type}
@@ -70,13 +70,49 @@
                 ik.type,
                 ik.`status`
             FROM
-                bison.item_key ik,
+                bison_amz_product_inventory.item_key ik,
                 bison.user u
             where
                  ik.business_unit_id = u.business_unit_id
                 and ik.type = #{type}
                 and u.user_id = #{userId}
                 and ik.status = #{status}
+
+    </select>
+
+    <select id="getByBusinessUnitIdAndStatus" resultType="com.leaderment.sales.pojo.ItemKey">
+         SELECT
+            ik.item_key_id 	as itemKeyId,
+            ik.item_key			as itemKey,
+            ik.type,
+            ik.`status`,
+            last_day_val as lastDayVal
+        FROM
+            bison_amz_product_inventory.item_key ik
+        WHERE
+            ik.status = #{status}
+            AND ik.business_unit_id = #{businessUnitId}
+
+    </select>
+
+    <insert id="save" parameterType="com.leaderment.sales.pojo.ItemKey"  useGeneratedKeys="true"  keyProperty="itemKeyId"
+            keyColumn="item_key_id">
+        insert into  bison_amz_product_inventory.item_key
+        (item_key,business_unit_id,`type`,`status`,last_day_val)
+        values(#{itemKey},#{businessUnitId},#{type},#{status},#{lastDayVal})
+    </insert>
+
+    <select id="findByItemKeyId" resultType="com.leaderment.sales.pojo.ItemKey">
+        SELECT
+            item_key_id 	as itemKeyId,
+            item_key	    as itemKey,
+            type,
+            `status`,
+            last_day_val as lastDayVal
+        FROM
+            bison_amz_product_inventory.item_key
+        WHERE
+            item_key_id = #{itemKeyId}
 
     </select>
 

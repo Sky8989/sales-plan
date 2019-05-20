@@ -3,22 +3,19 @@ package com.leaderment.sales.pojo;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "item_val", schema = "bison")
+
 public class ItemVal {
 
-    @Id
-    @Column(name = "item_val_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private int itemValId;
 
-    @Column(name = "item_key_id", nullable = false)
+
     private int ItemKeyId;
 
-    @Column(name = "item_val")
+
     private String itemVal;
 
-    @Column(name = "sale_plan_item_id", nullable = false)
+
     private int salePlanItemId;
 
 

@@ -1,41 +1,34 @@
 package com.leaderment.sales.service.impl;
 
-import com.leaderment.sales.mapper.jpa.ItemKeyMapper;
-import com.leaderment.sales.mapper.jpa.SalesVolumeRuleMapper;
 import com.leaderment.sales.mapper.jpa.UserMapper;
 import com.leaderment.sales.mapper.mybatis.ItemKeyMapperEx;
 import com.leaderment.sales.mapper.mybatis.SalesVolumeRuleItemKeyRelMapperEx;
+import com.leaderment.sales.mapper.mybatis.SalesVolumeRuleMapperEx;
 import com.leaderment.sales.pojo.ItemKey;
 import com.leaderment.sales.pojo.SalesVolumeRule;
 import com.leaderment.sales.pojo.SalesVolumeRuleItemKeyRel;
-import com.leaderment.sales.pojo.User;
-import com.leaderment.sales.pojo.vo.ShowItemKeyAndSalesVolumeRuleAllVO;
 import com.leaderment.sales.pojo.vo.ShowSalesVolumeRuleVO;
-import com.leaderment.sales.service.ItemKeyService;
 import com.leaderment.sales.service.SalesVolumeRuleItemKeyRelService;
 import com.leaderment.sales.service.SalesVolumeRuleService;
 import com.leaderment.sales.util.entity.ResultBean;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class SalesVolumeRuleServiceImpl implements SalesVolumeRuleService {
 
-    @Autowired
-    ItemKeyMapper itemKeyMapper;
+
 
     @Autowired
     UserMapper userMapper;
     @Autowired
     ItemKeyMapperEx itemKeyMapperEx;
-
     @Autowired
-    SalesVolumeRuleMapper salesVolumeRuleMapper;
+    SalesVolumeRuleMapperEx salesVolumeRuleMapperEx;
+
     @Autowired
     SalesVolumeRuleItemKeyRelMapperEx salesVolumeRuleItemKeyRelMapperEx;
     @Autowired
@@ -53,7 +46,7 @@ public class SalesVolumeRuleServiceImpl implements SalesVolumeRuleService {
         }
         //新增销量规则
         //通过 itemKeyId 查询出对应自定义列
-        ItemKey itemKey = itemKeyMapper.findOne(salesVolumeRule.getItemKeyId());
+        ItemKey itemKey = itemKeyMapperEx.findByItemKeyId(salesVolumeRule.getItemKeyId());
         if(itemKey == null){
             resultBean.setCode(500);
             resultBean.setMsg("不存在自定义列");
@@ -64,8 +57,8 @@ public class SalesVolumeRuleServiceImpl implements SalesVolumeRuleService {
         salesVolumeRuleDb.setMaxSalesVolume(salesVolumeRule.getMaxSalesVolume());
         salesVolumeRuleDb.setMinSalesVolume(salesVolumeRule.getMinSalesVolume());
         //1: 新增销量规则 并以指定 itemKeyId为参考 id
-        salesVolumeRuleMapper.save(salesVolumeRuleDb);
-
+        salesVolumeRuleMapperEx.save(salesVolumeRuleDb);
+        salesVolumeRuleDb.setSalesVolumeRuleId(salesVolumeRuleDb.getSalesVolumeRuleId());
         //2: 通过查询出来的自定义列 获取 businessUnitId 查询当前部门下的所有 自定义列
         List<ItemKey> itemKeyList = itemKeyMapperEx.findByBusinessUnitId(itemKey.getBusinessUnitId());
 

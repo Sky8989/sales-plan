@@ -1,7 +1,5 @@
 package com.leaderment.sales.service.impl;
 
-import com.leaderment.sales.mapper.jpa.ItemKeyMapper;
-import com.leaderment.sales.mapper.jpa.SalesVolumeRuleMapper;
 import com.leaderment.sales.mapper.jpa.UserMapper;
 import com.leaderment.sales.mapper.mybatis.ItemKeyMapperEx;
 import com.leaderment.sales.mapper.mybatis.SalesVolumeRuleItemKeyRelMapperEx;
@@ -14,20 +12,14 @@ import com.leaderment.sales.pojo.vo.ShowItemKeyAndSalesVolumeRuleAllVO;
 import com.leaderment.sales.pojo.vo.ShowItemKeyVO;
 import com.leaderment.sales.pojo.vo.ShowSalesVolumeRuleVO;
 import com.leaderment.sales.service.SalesVolumeRuleItemKeyRelService;
-import com.leaderment.sales.service.SalesVolumeRuleService;
-import com.leaderment.sales.util.entity.ResultBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class SalesVolumeRuleItemKeyServiceImpl implements SalesVolumeRuleItemKeyRelService {
-
-    @Autowired
-    ItemKeyMapper itemKeyMapper;
 
     @Autowired
     UserMapper userMapper;
@@ -119,7 +111,7 @@ public class SalesVolumeRuleItemKeyServiceImpl implements SalesVolumeRuleItemKey
                  * 获取itemKey
                  */
 
-                ItemKey itemKeyDb = itemKeyMapper.findOne(itemKeyId);
+                ItemKey itemKeyDb = itemKeyMapperEx.findByItemKeyId(itemKeyId);
 
                 showSalesVolumeRuleVO.setItemKeyId(itemKeyDb.getItemKeyId());
                 showSalesVolumeRuleVO.setItemKey(itemKeyDb.getItemKey());

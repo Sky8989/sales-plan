@@ -1,5 +1,6 @@
 package com.leaderment.sales.pojo.vo;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -23,8 +24,6 @@ public class SalePlanItemListByOperationsVO {
 
 
     private int userId;
-
-
 
     private String  countryName;
 
@@ -57,6 +56,9 @@ public class SalePlanItemListByOperationsVO {
     private int status;
 
     private String remark;
+
+    private List<String> showRemark;
+
 
     private String productModelNumber;
 
@@ -228,7 +230,10 @@ public class SalePlanItemListByOperationsVO {
     }
 
     public void setRemark(String remark) {
+
         this.remark = remark;
+
+        this.showRemark = Arrays.asList(remark.split("\n"));
     }
 
     public int getProductId() {
@@ -255,6 +260,15 @@ public class SalePlanItemListByOperationsVO {
         this.asin = asin;
     }
 
+
+    public List<String> getShowRemark() {
+        return showRemark;
+    }
+
+    public void setShowRemark(List<String> showRemark) {
+        this.showRemark = showRemark;
+    }
+
     @Override
     public String toString() {
         return "SalePlanItemListByOperationsVO{" +
@@ -269,11 +283,12 @@ public class SalePlanItemListByOperationsVO {
                 ", lastUnitsAvgDay=" + lastUnitsAvgDay +
                 ", estUnitsAvgDay=" + estUnitsAvgDay +
                 ", estUnitsPromotion=" + estUnitsPromotion +
-            //    ", rationality=" + rationality +
                 ", status=" + status +
                 ", remark='" + remark + '\'' +
+                ", showRemark=" + showRemark +
                 ", productModelNumber='" + productModelNumber + '\'' +
                 ", ItemValVOList=" + ItemValVOList +
+                ", totalSafetyDay=" + totalSafetyDay +
                 ", salesVolumeRuleId=" + salesVolumeRuleId +
                 ", amzProductNumberSum=" + amzProductNumberSum +
                 ", localProductNumberSum=" + localProductNumberSum +

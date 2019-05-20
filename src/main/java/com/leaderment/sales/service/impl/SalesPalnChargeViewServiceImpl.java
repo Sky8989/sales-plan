@@ -1,11 +1,9 @@
 package com.leaderment.sales.service.impl;
 
 
-import com.leaderment.sales.mapper.jpa.ItemKeyMapper;
-import com.leaderment.sales.mapper.jpa.SalesVolumeRuleMapper;
 import com.leaderment.sales.mapper.jpa.UserMapper;
 import com.leaderment.sales.mapper.mybatis.ItemKeyMapperEx;
-import com.leaderment.sales.mapper.mybatis.SalePalnMapperEx;
+import com.leaderment.sales.mapper.mybatis.SalePlanMapperEx;
 import com.leaderment.sales.mapper.mybatis.SalesVolumeRuleMapperEx;
 import com.leaderment.sales.mapper.mybatis.SalesVolumeRuleItemKeyRelMapperEx;
 import com.leaderment.sales.pojo.ItemKey;
@@ -33,19 +31,13 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
     ItemKeyMapperEx itemKeyMapperEx;
     @Autowired
     SalesVolumeRuleMapperEx salesVolumeRuleMapperEx;
-    @Autowired
-    ItemKeyMapper itemKeyMapper;
 
     @Autowired
     UserMapper userMapper;
 
-
     @Autowired
-    SalePalnMapperEx salePalnMapperEx;
+    SalePlanMapperEx salePlanMapperEx;
 
-
-    @Autowired
-    SalesVolumeRuleMapper salesVolumeRuleMapper;
     @Autowired
     SalesVolumeRuleItemKeyRelMapperEx salesVolumeRuleItemKeyRelMapperEx;
 
@@ -94,7 +86,8 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
             itemKey.setBusinessUnitId(user.getBusinessUnitId());
 
             //判断数据是否存在,存在不添加
-           itemKeyMapper.save(itemKey);
+            itemKeyMapperEx.save(itemKey);
+            itemKey.setItemKeyId(itemKey.getItemKeyId());
             itemKeyDbList.add(itemKey);
            itemKeyDbMap.put(itemKey.getItemKey()+"-"+itemKey.getType(),itemKey.getItemKeyId());
         }
@@ -117,7 +110,8 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
                 }
             }
             //新增销量规则
-            salesVolumeRuleMapper.save(salesVolumeRule);
+            salesVolumeRuleMapperEx.save(salesVolumeRule);
+            salesVolumeRule.setSalesVolumeRuleId(salesVolumeRule.getSalesVolumeRuleId());
             String key = salesVolumeRule.getMinSalesVolume() +"-"+ salesVolumeRule.getMaxSalesVolume();
             SalesVolumeRuleDbMap.put(key,salesVolumeRule.getSalesVolumeRuleId());
 
@@ -195,7 +189,7 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
         /**
          * 自定义列名 list
          */
-       List<ItemKey> itemKeyList = itemKeyMapper.getByBusinessUnitIdAndStatus(user.getBusinessUnitId(),1);
+       List<ItemKey> itemKeyList = itemKeyMapperEx.getByBusinessUnitIdAndStatus(user.getBusinessUnitId(),1);
 
        if(itemKeyList == null || itemKeyList.size() == 0){
            resultBean.setMsg("新增");
@@ -254,7 +248,7 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
         for (SalesVolumeRuleItemKeyRel salesVolumeRuleItemKeyRel : salesVolumeRuleItemKeyRelList){
             for (UpdateItemKeyVO itemKey : updateItemKeyVOList){
                 if(itemKey.getItemKeyId() == salesVolumeRuleItemKeyRel.getItemKeyId()){
-                    SalesVolumeRule salesVolumeRule =  salesVolumeRuleMapper.findOne(salesVolumeRuleItemKeyRel.getSalesVolumeRuleId());
+                    SalesVolumeRule salesVolumeRule =  salesVolumeRuleMapperEx.findBySalesVolumeRuleId(salesVolumeRuleItemKeyRel.getSalesVolumeRuleId());
                     System.out.println("salesVolumeRule == " + salesVolumeRule);
                     if(salesVolumeRule != null){
                         int min =  salesVolumeRule.getMinSalesVolume();
@@ -290,7 +284,7 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
             return resultBean;
         }
         SalesVolumeRule salesVolumeRule =  new SalesVolumeRule(updateRowSalesVolumeRuleDTO.getSalesVolumeRuleId(),updateRowSalesVolumeRuleDTO.getRationality());
-        SalesVolumeRule salesVolumeRuleDb = salesVolumeRuleMapper.findOne(salesVolumeRule.getSalesVolumeRuleId());
+        SalesVolumeRule salesVolumeRuleDb = salesVolumeRuleMapperEx.findBySalesVolumeRuleId(salesVolumeRule.getSalesVolumeRuleId());
 
         //不相等进行修改
         if(salesVolumeRule.getRationality() != salesVolumeRuleDb.getRationality()){
@@ -333,7 +327,7 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
             }
         }
 
-        ItemKey itemKeyDb = itemKeyMapper.findOne( updateRowSalesVolumeRuleDTO.getItemKeyId());
+        ItemKey itemKeyDb = itemKeyMapperEx.findByItemKeyId( updateRowSalesVolumeRuleDTO.getItemKeyId());
         //最后查最新的数据
         if(itemKeyDb != null){
             resultBean.setData(salesVolumeRuleItemKeyRelService.getShowItemKeyAndSalesVolumeRuleAllVOByBusinessUnitId(itemKeyDb.getBusinessUnitId()));
@@ -411,14 +405,14 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
 
         //直接通过BUId 查询 salePlanItem List
         findSalesPalnListDTO.setBusinessUnitId(businessUnitId);
-        List<SalePlanItemListVO> salePlanItemVOList =  salePalnMapperEx.findSalePlanItemListByBusinessUnitId(findSalesPalnListDTO);
+        List<SalePlanItemListVO> salePlanItemVOList =  salePlanMapperEx.findSalePlanItemListByBusinessUnitId(findSalesPalnListDTO);
 
         System.out.printf("salePlanItemVOList ==" + salePlanItemVOList);
         //第一次 存参考库存
         for(SalePlanItemListVO salePlanItem : salePlanItemVOList){
             int salePlanItemId = salePlanItem.getSalePlanItemId();
             //自定义的列 和对应值
-            List<ItemValVO>  itemValVOList =  salePalnMapperEx.findItemValBySalePlanItemId(salePlanItemId);
+            List<ItemValVO>  itemValVOList =  salePlanMapperEx.findItemValBySalePlanItemId(salePlanItemId);
             System.out.println("itemValVOList === " + itemValVOList);
 
 
@@ -430,7 +424,7 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
                     int lastDayVal = itemValVO.getLastDayVal();
                     //计算历史销量
                     System.out.println("-------------==计算历史销量");
-                    Integer lastUnitsOrderSum = salePalnMapperEx.getlastUnitsOrderedSum(lastDayVal,salePlanItem.getAsinId(),salePlanItem.getCountryId());
+                    Integer lastUnitsOrderSum = salePlanMapperEx.getlastUnitsOrderedSum(lastDayVal,salePlanItem.getAsinId(),salePlanItem.getCountryId());
                     lastUnitsOrderSum = lastUnitsOrderSum == null ? 0 : lastUnitsOrderSum;
                     System.out.println("历史销量 ==" + lastUnitsOrderSum);
                     itemValVO.setItemVal(lastUnitsOrderSum.toString());
@@ -537,7 +531,7 @@ public class SalesPalnChargeViewServiceImpl  implements SalesPalnSalesChargeView
             return resultBean;
         }
 
-        List<User> userList = salePalnMapperEx.findUserListByBusinessUnitIdAndStatus(user.getBusinessUnitId(),1);
+        List<User> userList = salePlanMapperEx.findUserListByBusinessUnitIdAndStatus(user.getBusinessUnitId(),1);
         resultBean.setData(userList);
         return resultBean;
     }

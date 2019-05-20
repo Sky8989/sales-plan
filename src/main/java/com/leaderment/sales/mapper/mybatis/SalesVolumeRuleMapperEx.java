@@ -21,4 +21,8 @@ public interface SalesVolumeRuleMapperEx {
     int deleteBySalesVolumeRuleIdAndItemKeyId(int salesVolumeRuleId);
 
     List<SalesVolumeRule> findSalesVolumeRuleByItemKeyId(int itemKeyId);
+
+    int save(SalesVolumeRule salesVolumeRule);
+
+    SalesVolumeRule findBySalesVolumeRuleId(int salesVolumeRuleId);
 }

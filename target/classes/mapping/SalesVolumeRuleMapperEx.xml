@@ -15,13 +15,13 @@
             svr.min_sales_volume as minSalesVolume,
             svr.max_sales_volume as maxSalesVolume
         FROM
-            bison.sales_volume_rule svr,
+            bison_amz_product_inventory.sales_volume_rule svr,
             (select
             sales_volume_rule_id,
             item_key_id,
             item_key_ratio
             from
-            bison.sales_volume_rule_item_key_rel
+            bison_amz_product_inventory.sales_volume_rule_item_key_rel
             where item_key_id = #{itemKeyId})  t1
         where
             svr.sales_volume_rule_id in (t1.sales_volume_rule_id)
@@ -33,7 +33,7 @@
             item_key_id	        as itemKeyId,
             rationality
         FROM
-            bison.sales_volume_rule
+            bison_amz_product_inventory.sales_volume_rule
         where
             item_key_id = #{itemKeyId}
 
@@ -57,18 +57,18 @@
             svr.max_sales_volume		as maxSalesVolume,
             svr.rationality
         FROM
-            bison.sales_volume_rule svr
+            bison_amz_product_inventory.sales_volume_rule svr
         LEFT JOIN
-            bison.item_key ik ON svr.item_key_id = ik.item_key_id
+            bison_amz_product_inventory.item_key ik ON svr.item_key_id = ik.item_key_id
             where ik.item_key_id = #{itemKeyId}
     </select>
 
     <update id="updateRationalityById" parameterType="com.leaderment.sales.pojo.SalesVolumeRule">
-        update  bison.sales_volume_rule set rationality = #{rationality} where sales_volume_rule_id =  #{salesVolumeRuleId}
+        update  bison_amz_product_inventory.sales_volume_rule set rationality = #{rationality} where sales_volume_rule_id =  #{salesVolumeRuleId}
     </update>
 
     <delete id="deleteBySalesVolumeRuleIdAndItemKeyId">
-        delete from bison.sales_volume_rule where sales_volume_rule_id = #{salesVolumeRuleId}
+        delete from bison_amz_product_inventory.sales_volume_rule where sales_volume_rule_id = #{salesVolumeRuleId}
     </delete>
 
     <select id="findSalesVolumeRuleByItemKeyId" resultType="com.leaderment.sales.pojo.SalesVolumeRule">
@@ -79,10 +79,36 @@
             svr.max_sales_volume		as maxSalesVolume,
             svr.rationality
         FROM
-            bison.sales_volume_rule svr
+            bison_amz_product_inventory.sales_volume_rule svr
         where
             svr.item_key_id = #{itemKeyId}
 
+    </select>
+
+
+    <insert id="save" parameterType="com.leaderment.sales.pojo.SalesVolumeRule" useGeneratedKeys="true"
+            keyProperty="salesVolumeRuleId" keyColumn="item_key_item_id">
+        insert into bison_amz_product_inventory.sales_volume_rule
+
+        (item_key_id,min_sales_volume,max_sales_volume,rationality)
+        values
+        (#{itemKeyId},#{minSalesVolume},#{maxSalesVolume},#{rationality})
+
+
+    </insert>
+
+    <select id="findBySalesVolumeRuleId" resultType="com.leaderment.sales.pojo.SalesVolumeRule">
+
+        SELECT
+            svr.sales_volume_rule_id	as salesVolumeRuleId,
+            svr.item_key_id	            as itemKeyId,
+            svr.min_sales_volume		as minSalesVolume,
+            svr.max_sales_volume		as maxSalesVolume,
+            svr.rationality
+        FROM
+            bison_amz_product_inventory.sales_volume_rule svr
+        where
+            svr.sales_volume_rule_id = #{salesVolumeRuleId}
     </select>
 
 

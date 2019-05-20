@@ -1,16 +1,16 @@
 server:
-  port: 10022
+  port: 10023
 spring:
   application:
     name: sales-plan #指定服务名
   datasource:
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/bison?useSSL=false&zeroDateTimeBehavior=convertToNull
- #   url: jdbc:mysql://lmdevnts0001.leaderment.com:3306/bison?useSSL=false&zeroDateTimeBehavior=convertToNull
- #   username: root
-    username: admin
-  #  password: Ldm_1910%
-    password: root
+   # url: jdbc:mysql://127.0.0.1:3306/bison?useSSL=false&zeroDateTimeBehavior=convertToNull&characterEncoding=utf8
+    url: jdbc:mysql://lmdevnts0001.leaderment.com:3306/bison?useSSL=false&zeroDateTimeBehavior=convertToNull&characterEncoding=utf8
+    username: root
+  #  username: admin
+    password: Ldm_1910%
+  #  password: root
   jpa:
     database: MySQL
     show-sql: true
@@ -26,14 +26,14 @@ spring:
   resources:
     static-locations: classpath:/static/
 
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: http://192.168.1.224:10020/eureka/
-#  instance:
-#    prefer-ip-address: true
-#    instance-id: bison-SalePaln
-#    appname: ${spring.application.name}
+eureka:
+  client:
+    service-url:
+      defaultZone: http://192.168.1.220:10020/eureka/
+  instance:
+    prefer-ip-address: true
+    instance-id:  sales-plan
+    appname: ${spring.application.name}
 
 mybatis:
   type-aliases-package: com.leaderment.product.pojo.mybatis_pojo

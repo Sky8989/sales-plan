@@ -12,24 +12,21 @@ import javax.persistence.*;
  * @Date 19-4-26 下午4:03
  * @Version 1.0
  **/
-@Entity
-@Table(name = "sale_plan_Item", schema = "bison")
+
 public class SalePlanItem {
-    @Id
-    @Column(name = "sale_plan_item_id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private int salePlanItemId;
 
-    @Column(name = "sale_plan_id", nullable = false)
+
     private int salePlanId;
 
-    @Column(name = "product_id", nullable = false)
+
     private int productId;
 
-    @Column(name = "user_id", nullable = false)
+
     private int userId;
 
-    @Column(name = "country", nullable = false)
+
     private int country;
 
     @Transient
@@ -38,7 +35,7 @@ public class SalePlanItem {
     @Transient
     private int estUnitsAvgDay;
 
-    @Column(name = "est_units_promotion", nullable = false)
+
     private int estUnitsPromotion;
 
 
@@ -47,10 +44,10 @@ public class SalePlanItem {
 
 
 
-    @Column(name = "status", nullable = false)
+
     private int status;
 
-    @Column(name = "remark")
+
     private String remark;
 
     public SalePlanItem(){}
