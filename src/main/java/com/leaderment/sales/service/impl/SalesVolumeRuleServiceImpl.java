@@ -47,6 +47,7 @@ public class SalesVolumeRuleServiceImpl implements SalesVolumeRuleService {
         //新增销量规则
         //通过 itemKeyId 查询出对应自定义列
         ItemKey itemKey = itemKeyMapperEx.findByItemKeyId(salesVolumeRule.getItemKeyId());
+
         if(itemKey == null){
             resultBean.setCode(500);
             resultBean.setMsg("不存在自定义列");

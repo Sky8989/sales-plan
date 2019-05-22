@@ -248,6 +248,7 @@
         sp.user_id = u.user_id
         and u.business_unit_id = #{businessUnitId}
         and sp.status = #{status}
+        group by u.user_id
     </select>
 
     <select id="findCountryIdByCountryName" resultType="java.lang.Integer">

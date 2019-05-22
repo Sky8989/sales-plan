@@ -3,6 +3,7 @@ package com.leaderment.sales.handler;
 
 import com.leaderment.sales.mapper.mybatis.SalePlanMapperEx;
 import com.leaderment.sales.pojo.ItemKey;
+import com.leaderment.sales.pojo.dto.BatchItemValDTO;
 import com.leaderment.sales.service.ItemKeyService;
 import com.leaderment.sales.service.SalesPalnSalesViewService;
 import com.leaderment.sales.util.entity.ResultBean;
@@ -41,10 +42,10 @@ public class ItemKeyHandler {
     }
 
     @ApiOperation(value = "通过 itemKeyId 更改 自定义列 的状态")
-    @GetMapping("/updateItemKeyStatus/{itemKeyId}")
-    public ResultBean deleteItemKey(@PathVariable  int itemKeyId) {
+    @GetMapping("/updateItemKeyStatus/{itemKeyId}/{status}")
+    public ResultBean deleteItemKey(@PathVariable("itemKeyId")  int itemKeyId,@PathVariable("status")int status) {
         System.out.println("itemKeyId = " +itemKeyId);
-        ResultBean result = itemKeyService.UpdateItemKeyStatus(itemKeyId);
+        ResultBean result = itemKeyService.updateItemKeyStatus(itemKeyId,status);
         return result;
     }
 
@@ -55,6 +56,17 @@ public class ItemKeyHandler {
         ResultBean result = itemKeyService.updateItemKey(itemKey);
         return result;
     }
+
+    @ApiOperation(value = "批量修改预测值")
+    @PostMapping("/batchItemValue")
+    public ResultBean batchItemValue(@RequestBody BatchItemValDTO batchItemValDTO) {
+        System.out.println("batchItemValDTO = " +batchItemValDTO);
+
+        ResultBean result = itemKeyService.batchItemValue(batchItemValDTO);
+        return result;
+    }
+
+
 
 
 

@@ -41,7 +41,7 @@
                 and spi.user_id = u.user_id
                 and rel.product_id = up.product_id
                 and u.user_id = #{userId}
-                and spi.status > 2
+                and spi.status > 2 and spi.status != 4
         <if test="countryIdList != null and countryIdList.size() > 0">
             and spi.country in
             <foreach collection="countryIdList" item="countryId" index="index" open="(" close=")" separator=",">
@@ -102,6 +102,11 @@
         (#{salePlanId},#{country},#{productId},#{userId},#{status},#{remark},#{estUnitsPromotion})
 
     </insert>
+
+
+    <update id="updateRemarkBySalePlanItem"  parameterType="com.leaderment.sales.pojo.SalePlanItem">
+        update bison_amz_product_inventory.sale_plan_item set remark = #{remark} where sale_plan_item_id = #{salePlanItemId}
+  </update>
 
 
 

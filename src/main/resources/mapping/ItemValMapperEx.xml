@@ -12,6 +12,10 @@
         values(#{itemVal},#{itemKeyId},#{salePlanItemId})
     </insert>
 
+    <update id="updateItemValById" >
+        update bison_amz_product_inventory.item_val set item_val = #{itemVal} where item_val_id = #{itemValId}
+    </update>
+
 
 
 </mapper>

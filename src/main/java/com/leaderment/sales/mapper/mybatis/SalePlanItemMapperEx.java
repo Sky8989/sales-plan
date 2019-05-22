@@ -23,4 +23,7 @@ public interface SalePlanItemMapperEx {
     SalePlanItem findBySalePlanItemId(int salePlanItemId);
 
     int save(SalePlanItem salePlanItem);
+
+
+    int updateRemarkBySalePlanItem(SalePlanItem salePlanItem);
 }

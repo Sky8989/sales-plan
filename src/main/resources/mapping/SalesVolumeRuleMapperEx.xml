@@ -47,7 +47,30 @@
 
     </select>
 
-    <select id="findByUpdateSalesVolumeRuleVOItemKeyId" resultType="com.leaderment.sales.pojo.vo.UpdateSalesVolumeRuleVO">
+
+    <select id="findBySales" resultType="com.leaderment.sales.pojo.SalesVolumeRule">
+
+        SELECT
+        sales_volume_rule_id	as salesVolumeRuleId,
+        item_key_id	        as itemKeyId,
+        rationality
+        FROM
+        bison_amz_product_inventory.sales_volume_rule
+        where
+         1 = 1
+
+        <if test="lastUnitsOrderSum == 0">
+            and (min_sales_volume <![CDATA[<=]]>  #{lastUnitsOrderSum}  )
+        </if>
+
+        <if test="lastUnitsOrderSum != 0">
+            and (min_sales_volume <![CDATA[<]]>  #{lastUnitsOrderSum} and #{lastUnitsOrderSum}  <![CDATA[<=]]> max_sales_volume )
+        </if>
+
+    </select>
+
+
+    <select id="findByUpdateSalesVolumeRuleVOItemKeyId"  resultType="com.leaderment.sales.pojo.vo.UpdateSalesVolumeRuleVO">
         SELECT
             ik.item_key_id				as itemKeyId,
             ik.item_key					as itemKey,

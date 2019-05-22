@@ -38,7 +38,7 @@ public class SalesVolumeRuleItemKeyServiceImpl implements SalesVolumeRuleItemKey
 
         User user = userMapper.findByUserId(userId);
 
-        System.out.println("user =" + user);
+        //System.out.println("user =" + user);
 
        List<ItemKey> itemKeyList =  itemKeyMapperEx.findByBusinessUnitId(user.getBusinessUnitId());
 
@@ -145,7 +145,7 @@ public class SalesVolumeRuleItemKeyServiceImpl implements SalesVolumeRuleItemKey
 
 
 
-        System.out.println("showSalesVolumeRuleVOList = " + showSalesVolumeRuleVOList);
+        //System.out.println("showSalesVolumeRuleVOList = " + showSalesVolumeRuleVOList);
 
         return showSalesVolumeRuleVOList;
     }

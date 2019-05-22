@@ -25,4 +25,6 @@ public interface SalesVolumeRuleMapperEx {
     int save(SalesVolumeRule salesVolumeRule);
 
     SalesVolumeRule findBySalesVolumeRuleId(int salesVolumeRuleId);
+
+    SalesVolumeRule findBySales(@Param("lastUnitsOrderSum") Integer lastUnitsOrderSum);
 }

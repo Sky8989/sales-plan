@@ -2,12 +2,14 @@ package com.leaderment.sales.service.impl;
 
 import com.leaderment.sales.mapper.jpa.UserMapper;
 import com.leaderment.sales.mapper.mybatis.ItemKeyMapperEx;
+import com.leaderment.sales.mapper.mybatis.ItemValMapperEx;
 import com.leaderment.sales.mapper.mybatis.SalesVolumeRuleItemKeyRelMapperEx;
 import com.leaderment.sales.mapper.mybatis.SalesVolumeRuleMapperEx;
 import com.leaderment.sales.pojo.ItemKey;
 import com.leaderment.sales.pojo.SalesVolumeRule;
 import com.leaderment.sales.pojo.SalesVolumeRuleItemKeyRel;
 import com.leaderment.sales.pojo.User;
+import com.leaderment.sales.pojo.dto.BatchItemValDTO;
 import com.leaderment.sales.pojo.vo.ShowItemKeyAndSalesVolumeRuleAllVO;
 import com.leaderment.sales.pojo.vo.ShowItemKeyVO;
 import com.leaderment.sales.service.ItemKeyService;
@@ -17,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +32,9 @@ public class ItemKeyServiceImpl implements ItemKeyService {
     UserMapper userMapper;
     @Autowired
     ItemKeyMapperEx itemKeyMapperEx;
+
+    @Autowired
+    ItemValMapperEx itemValMapperEx;
 
     @Autowired
     SalesVolumeRuleMapperEx salesVolumeRuleMapperEx;
@@ -77,7 +83,7 @@ public class ItemKeyServiceImpl implements ItemKeyService {
         }
 
        User user =  userMapper.findByUserId(itemKey.getUserId());
-        System.out.println("user = " + user);
+        //System.out.println("user = " + user);
         if(user == null){
             resultBean.setCode(500);
             resultBean.setMsg("数据库不存在当前用户");
@@ -98,7 +104,7 @@ public class ItemKeyServiceImpl implements ItemKeyService {
             itemKey.setLastDayVal(Integer.parseInt(itemKey.getItemKey()));
             itemKeyMapperEx.save(itemKey);
             itemKey.setItemKeyId(itemKey.getItemKeyId());
-            System.out.printf("新增== itemKey = " + itemKey);
+            //System.out.printf("新增== itemKey = " + itemKey);
             if(itemKey.getItemKeyId() > 0){
                 //查询当前部门下的所有itemKey
                List<ItemKey> itemKeyList = itemKeyMapperEx.findByBusinessUnitId(itemKey.getBusinessUnitId());
@@ -113,7 +119,7 @@ public class ItemKeyServiceImpl implements ItemKeyService {
                     }
                 }
 
-                System.out.println("salesVolumeRuleList  = " + salesVolumeRuleList);
+                //System.out.println("salesVolumeRuleList  = " + salesVolumeRuleList);
                 //给 当前自定义列  对应每一个规则 添加初始化比率
                 for(SalesVolumeRule salesVolumeRule : salesVolumeRuleList){
                     SalesVolumeRuleItemKeyRel salesVolumeRuleItemKeyRel = new SalesVolumeRuleItemKeyRel();
@@ -201,8 +207,9 @@ public class ItemKeyServiceImpl implements ItemKeyService {
      * @param itemKeyId
      * @return
      */
+    @Transactional
     @Override
-    public ResultBean UpdateItemKeyStatus(int itemKeyId) {
+    public ResultBean updateItemKeyStatus(int itemKeyId,int status) {
         ResultBean resultBean = new ResultBean();
 
         if(itemKeyId == 0){
@@ -210,6 +217,15 @@ public class ItemKeyServiceImpl implements ItemKeyService {
             resultBean.setCode(500);
             return resultBean;
         }
+        if(status == 0){
+            resultBean.setMsg("状态非法,禁用失败");
+            resultBean.setCode(500);
+            return resultBean;
+        }
+
+
+        //禁用状态
+        int num = itemKeyMapperEx.updateStatusByItemKeyId(status,itemKeyId);
 
         ItemKey itemKey = itemKeyMapperEx.findByItemKeyId(itemKeyId);
         if(itemKey == null){
@@ -217,18 +233,16 @@ public class ItemKeyServiceImpl implements ItemKeyService {
             resultBean.setCode(500);
             return resultBean;
         }
-        //禁用状态
-        int num = itemKeyMapperEx.updateStatusByItemKeyId(-itemKey.getStatus(),itemKeyId);
 
         if(num > 0){
-            if(itemKey.getStatus() == 1){
+            if(itemKey.getStatus() == 2){
                 resultBean.setMsg("禁用成功!!");
             }else{
                 resultBean.setMsg("启用成功!!");
             }
 
         }else {
-            if(itemKey.getStatus() == 1){
+            if(itemKey.getStatus() == 2){
                 resultBean.setMsg("禁用失败!!");
             }else{
                 resultBean.setMsg("启用失败!!");
@@ -239,7 +253,7 @@ public class ItemKeyServiceImpl implements ItemKeyService {
 
         //查询所有数据
         //最后查最新的数据
-            resultBean.setData(salesVolumeRuleItemKeyRelService.getShowItemKeyAndSalesVolumeRuleAllVOByBusinessUnitId(itemKey.getBusinessUnitId()));
+        resultBean.setData(salesVolumeRuleItemKeyRelService.getShowItemKeyAndSalesVolumeRuleAllVOByBusinessUnitId(itemKey.getBusinessUnitId()));
         return resultBean;
     }
 
@@ -286,14 +300,43 @@ public class ItemKeyServiceImpl implements ItemKeyService {
 
         User user = userMapper.findByUserId(userId);
 
-        System.out.println("user =" + user);
+        //System.out.println("user =" + user);
 
         List<ItemKey> itemKeyList =  itemKeyMapperEx.findByBusinessUnitId(user.getBusinessUnitId());
 
         List<ShowItemKeyVO>  showItemKeyVOList =  salesVolumeRuleItemKeyServiceImpl.itemKeyListToShowItemKeyVOList(itemKeyList);
 
-
-
         return showItemKeyVOList;
+    }
+
+    @Override
+    public ResultBean batchItemValue(BatchItemValDTO batchItemValDTO) {
+        ResultBean resultBean = new ResultBean();
+
+        if(batchItemValDTO == null || batchItemValDTO.getItemValIdAndItemValList() == null || batchItemValDTO.getItemValIdAndItemValList().size() == 0){
+            resultBean.setCode(500);
+            resultBean.setMsg("传入的数据为空保存失败!");
+            return resultBean;
+        }
+        List<String> itemValIdAndItemValList = batchItemValDTO.getItemValIdAndItemValList();
+
+        for (String itemValIdAndItemVal : itemValIdAndItemValList){
+            String[] arr = itemValIdAndItemVal.split("=");
+            if(arr.length == 2){
+                int itemValId =  Integer.parseInt(arr[0]);
+                String itemVal = arr[1];
+
+                int num = itemValMapperEx.updateItemValById(itemValId,itemVal);
+                if(num > 0){
+                    resultBean.setMsg("保存成功");
+                }else{
+                    resultBean.setMsg("保存失败");
+                    resultBean.setCode(500);
+                    return resultBean;
+                }
+            }
+        }
+
+        return resultBean;
     }
 }

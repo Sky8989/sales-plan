@@ -7,6 +7,8 @@ public class ItemValVO {
     private int status;
     private String itemKey;
     private String itemVal;
+
+    private boolean disabled = true;
     /**
      * 历史销量 对应的天数
      */
@@ -17,6 +19,14 @@ public class ItemValVO {
      */
     private double itemKeyRatio;
 
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
 
     public double getItemKeyRatio() {
         return itemKeyRatio;

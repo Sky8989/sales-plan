@@ -86,7 +86,8 @@
             ik.item_key			as itemKey,
             ik.type,
             ik.`status`,
-            last_day_val as lastDayVal
+            last_day_val as lastDayVal,
+            business_unit_id    as businessUnitId
         FROM
             bison_amz_product_inventory.item_key ik
         WHERE
@@ -106,6 +107,7 @@
         SELECT
             item_key_id 	as itemKeyId,
             item_key	    as itemKey,
+            business_unit_id    as businessUnitId,
             type,
             `status`,
             last_day_val as lastDayVal

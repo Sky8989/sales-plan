@@ -78,7 +78,7 @@ public class SalesOperationsViewServicelmpl implements SalesOperationsViewServic
             int asinId = salePlanItem.getAsinId();
             //自定义的列 和对应值
             List<ItemValVO>  itemValVOList =  salePlanMapperEx.findItemValBySalePlanItemId(salePlanItemId);
-            System.out.println("itemValVOList === " + itemValVOList);
+            //System.out.println("itemValVOList === " + itemValVOList);
 
 
             //1: 遍历list 查询亚马逊仓的总数  (可买，清点中，在途中)
@@ -97,19 +97,20 @@ public class SalesOperationsViewServicelmpl implements SalesOperationsViewServic
             //1:获取规则
             for(ItemValVO  itemValVO : itemValVOList){
                 //历史销量
-                System.out.println("============历史销量");
+                //System.out.println("============历史销量");
                 if(itemValVO.getType() == 1){
                     int lastDayVal = itemValVO.getLastDayVal();
                     //计算历史销量
-                    System.out.println("-------------==计算历史销量");
+                    //System.out.println("-------------==计算历史销量");
                     Integer lastUnitsOrderSum = salePlanMapperEx.getlastUnitsOrderedSum(lastDayVal,salePlanItem.getAsinId(),salePlanItem.getCountryId());
                     lastUnitsOrderSum = lastUnitsOrderSum == null ? 0 : lastUnitsOrderSum;
-                    System.out.println("历史销量 ==" + lastUnitsOrderSum);
+                    //System.out.println("历史销量 ==" + lastUnitsOrderSum);
                     itemValVO.setItemVal(lastUnitsOrderSum.toString());
 //                            lastSaleVolumeSum += lastUnitsOrderSum;
 
                     //通过销量去查询对应规则 sales_volume_rule 一次只能匹配一个规则
-                    SalesVolumeRule salesVolumeRule = salesVolumeRuleMapperEx.findByItemKeyIdAndSales(itemValVO.getItemKeyId(),lastUnitsOrderSum);
+                    //SalesVolumeRule salesVolumeRule = salesVolumeRuleMapperEx.findByItemKeyIdAndSales(itemValVO.getItemKeyId(),lastUnitsOrderSum);
+                    SalesVolumeRule salesVolumeRule = salesVolumeRuleMapperEx.findBySales(lastUnitsOrderSum);
 
                     //拿到对应规则 放入到当前 salePlanItem中
                     if(salesVolumeRule != null){
@@ -121,12 +122,12 @@ public class SalesOperationsViewServicelmpl implements SalesOperationsViewServic
             if(salePlanItem.getSalesVolumeRuleId() != 0){
                 //通过规则id 获取一组比率
                 List<SalesVolumeRuleItemKeyRel>  salesVolumeRuleItemKeyRel =  salesVolumeRuleItemKeyRelMapperEx.findBySalesVolumeRuleId(salePlanItem.getSalesVolumeRuleId());
-                System.out.println("salesVolumeRuleItemKeyRel ====" + salesVolumeRuleItemKeyRel);
+                //System.out.println("salesVolumeRuleItemKeyRel ====" + salesVolumeRuleItemKeyRel);
                 //2:添加比率
                 for(ItemValVO  itemValVO2 : itemValVOList){
                     for (SalesVolumeRuleItemKeyRel rel : salesVolumeRuleItemKeyRel){
                         if(rel.getItemKeyId() == itemValVO2.getItemKeyId()){
-                            System.out.println("rel.getItemKeyRatio() ====" + rel.getItemKeyRatio());
+                            //System.out.println("rel.getItemKeyRatio() ====" + rel.getItemKeyRatio());
                             itemValVO2.setItemKeyRatio(rel.getItemKeyRatio());
                             break;
                         }
@@ -141,7 +142,7 @@ public class SalesOperationsViewServicelmpl implements SalesOperationsViewServic
         for(SalePlanItemListByOperationsVO salePlanItem2 : salePlanItemListByOperationsVOList){
             //自定义的列 和对应值
             List<ItemValVO>  itemValVOList =  salePlanItem2.getItemValVOList();
-            System.out.println("itemValVOList === " + itemValVOList);
+            //System.out.println("itemValVOList === " + itemValVOList);
 
             /**
              * 历史销量*比率 总和
@@ -155,23 +156,23 @@ public class SalesOperationsViewServicelmpl implements SalesOperationsViewServic
             //历史销量求和 预测销量求和
             for(ItemValVO  itemValVO : itemValVOList){
                 if(itemValVO.getType() == 1){
-                    int lastSales = Integer.parseInt(itemValVO.getItemVal());
+                    int lastSales = Integer.parseInt(itemValVO.getItemVal() == "" ? "0" : itemValVO.getItemVal());
                     // lastSaleVolumeSum += lastSales;
                     lastSaleVolumeRatioSum += lastSales * itemValVO.getItemKeyRatio();
                 }else if(itemValVO.getType() == 2){
-                    int estSales = Integer.parseInt(itemValVO.getItemVal());
+                    int estSales = Integer.parseInt(itemValVO.getItemVal() == "" ? "0" : itemValVO.getItemVal());
                     //  estSaleVolumeSum += estSales;
                     estSaleVolumeRatioSum += estSales * itemValVO.getItemKeyRatio();
                 }
             }
 
-            System.out.println("========计算加权后历史日均");
-            System.out.println("========lastSaleVolumeRatioSum = " + lastSaleVolumeRatioSum);
+            //System.out.println("========计算加权后历史日均");
+            //System.out.println("========lastSaleVolumeRatioSum = " + lastSaleVolumeRatioSum);
             //计算加权后历史日均
             salePlanItem2.setLastUnitsAvgDay((int)lastSaleVolumeRatioSum);
 
-            System.out.println("========计算加权后预测日均");
-            System.out.println("========estSaleVolumeRatioSum = " + estSaleVolumeRatioSum);
+            //System.out.println("========计算加权后预测日均");
+            //System.out.println("========estSaleVolumeRatioSum = " + estSaleVolumeRatioSum);
             //计算加权后预测日均
             salePlanItem2.setEstUnitsAvgDay((int)estSaleVolumeRatioSum);
 
@@ -248,7 +249,7 @@ public class SalesOperationsViewServicelmpl implements SalesOperationsViewServic
         SalePlanItem salePlanItem = salePlanItemMapperEx.findBySalePlanItemId(addRemarkDTO.getSalePlanItemId());
         String userName = user.getUserName();
 
-        if(salePlanItem != null){
+        if(salePlanItem != null ){
             StringBuffer saveRemarkSb =  new StringBuffer();
             if(StringUtils.isEmpty(salePlanItem.getRemark())){
                 //1:第一次添加
@@ -277,10 +278,15 @@ public class SalesOperationsViewServicelmpl implements SalesOperationsViewServic
             if(StringUtils.isNotEmpty(saveRemarkSb.toString())){
                 salePlanItem.setRemark(saveRemarkSb.toString());
 
-                System.out.printf("salePlanItem = " + salePlanItem);
-                salePlanItemMapperEx.save(salePlanItem);
-                salePlanItem.setSalePlanItemId(salePlanItem.getSalePlanItemId());
-                resultBean.setMsg("保存成功!");
+                //System.out.printf("salePlanItem = " + salePlanItem);
+               int num =  salePlanItemMapperEx.updateRemarkBySalePlanItem(salePlanItem);
+               if(num > 0){
+                   resultBean.setMsg("保存成功!");
+               }else{
+                   resultBean.setMsg("保存失败!");
+                   resultBean.setCode(500);
+               }
+
             }
         }
 
